@@ -1,32 +1,55 @@
 import torch
+import bitsandbytes as bnb
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 from peft import LoraConfig, PeftModel, get_peft_model, prepare_model_for_kbit_training
 
 from dialogue_kt.utils import get_checkpoint_path
 
+# 4-bit quantization config (NF4 with double quantization for best quality)
 bnb_config = BitsAndBytesConfig(
-    load_in_8bit=True,
+    load_in_4bit=True,
+    bnb_4bit_compute_dtype=torch.bfloat16,
+    bnb_4bit_use_double_quant=True,
+    bnb_4bit_quant_type="nf4",
 )
 
-def get_base_model(base_model_name: str, tokenizer: AutoTokenizer, quantize: bool):
+_quantize_available = True  # bitsandbytes is working with torch 2.12.0 + CUDA 13.0
+
+def get_base_model(base_model_name: str, tokenizer: AutoTokenizer, quantize: bool, eager_attention: bool = False):
+    if quantize and not _quantize_available:
+        print("WARNING: Quantization requested but bitsandbytes not available. Running without quantization.")
+        quantize = False
+    # When quantizing, bitsandbytes handles device placement — cannot use explicit device_map
+    device_map = None if quantize else {"": 0}
+    attn_kwargs = {"attn_implementation": "eager"} if eager_attention else {}
     base_model = AutoModelForCausalLM.from_pretrained(
         base_model_name,
         pad_token_id=tokenizer.pad_token_id,
+        trust_remote_code=True,
         quantization_config=bnb_config if quantize else None,
         # f32 seems helpful for train/test time consistency when quantizing, bf16 performs best for non-quantized
-        torch_dtype=torch.float32 if quantize else torch.bfloat16,
-        device_map={"": 0}
+        dtype=torch.float32 if quantize else torch.bfloat16,
+        device_map=device_map,
+        **attn_kwargs
     )
     base_model.config.use_cache = False
     base_model.config.pretraining_tp = 1
+    # Enable gradient checkpointing to save memory
+    # use_reentrant=True preserves the legacy behavior (less memory than non-reentrant)
+    base_model.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": True})
     return base_model
 
 def get_model(base_model_name: str, test: bool,
               model_name: str = None, pt_model_name: str = None,
               r: int = None, lora_alpha: int = None,
               quantize: bool = True, use_gradient_checkpointing: bool = True):
-    tokenizer = AutoTokenizer.from_pretrained(base_model_name, padding_side="right")
-    tokenizer.pad_token = tokenizer.bos_token # Have to pick some token, and eos triggers a warning
+    tokenizer = AutoTokenizer.from_pretrained(base_model_name, padding_side="right", trust_remote_code=True)
+    # Set pad_token: if bos_token exists use it, otherwise use eos_token
+    if tokenizer.pad_token is None:
+        if tokenizer.bos_token is not None:
+            tokenizer.pad_token = tokenizer.bos_token
+        else:
+            tokenizer.pad_token = tokenizer.eos_token
     model = get_base_model(base_model_name, tokenizer, quantize)
     if test and model_name:
         # Note we are loading adapter on quantized model and not merging

@@ -6,3 +6,11 @@ data/src/*.json
 results/**/*.json
 results/**/*.txt
 results/**/*.csv
+skills-lock.json
+literature/*.pdf
+literature/*/*.pdf
+saved_models/
+skills-lock.json
+literature/*.pdf
+literature/*/*.pdf
+saved_models/

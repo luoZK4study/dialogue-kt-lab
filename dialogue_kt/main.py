@@ -51,7 +51,7 @@ def main():
     for subparser in [parser_train, parser_test, parser_visualize]:
         subparser.add_argument("--model_type", type=str, choices=["lmkt", "random", "majority", "bkt"] + BASELINE_MODELS, default="lmkt", help="Model architecture to use")
         subparser.add_argument("--model_name", type=str, help="Name of model to save for training or load for testing")
-        subparser.add_argument("--base_model", type=str, default="meta-llama/Meta-Llama-3.1-8B-Instruct", help="HuggingFace base model for LLMKT")
+        subparser.add_argument("--base_model", type=str, default="Qwen/Qwen3-1.7B", help="HuggingFace base model for LLMKT")
         subparser.add_argument("--inc_first_label", action="store_true", help="Include first turn label in dialogues when testing")
 
     for subparser in [parser_train, parser_test]:
@@ -60,9 +60,15 @@ def main():
         subparser.add_argument("--testonval", action="store_true", help="Run testing phase on validation set (automatic for hyperparam_sweep)")
         subparser.add_argument("--agg", type=str, choices=["prod", "mean-ar", "mean-geo"], default="mean-ar", help="Method for aggregating KC probabilities into correctness probability")
         subparser.add_argument("--pack_kcs", type=bool_type, default=True, help="For LLMKT, pack all KCs for a turn in a single prompt")
-        subparser.add_argument("--quantize", type=bool_type, default=False, help="Quantize LLMKT base model")
+        subparser.add_argument("--quantize", type=bool_type, default=True, help="Quantize LLMKT base model")
         subparser.add_argument("--prompt_inc_labels", type=bool_type, default=False, help="For LLMKT, include explicit correctness and KC labels in prompt")
         subparser.add_argument("--emb_size", type=int, help="Latent state dimension for DKT family models")
+        subparser.add_argument("--selfelicit", type=str, choices=["prompt", "inference", "weighted", "combined"], default=None,
+                               help="SELFELICIT mode: prompt=evidence-marked prompts, inference=two-pass test, weighted=attention-weighted aggregation, combined=prompt+weighted")
+        subparser.add_argument("--bayes_evidence", type=str, choices=["adaptive", "recent2", "recent3", "adaptive_labels"], default=None,
+                               help="Bayesian epistemology prompt mode: evidence reliability markers, optionally with past labels")
+        subparser.add_argument("--informativeness", type=str, choices=["novelty", "novelty_recent", "recent_grounded", "novelty_prune", "novelty_recent_prune", "recent_prune"], default=None,
+                               help="Stepwise informativeness prompt mode: mark/prune underutilized non-redundant dialogue steps")
 
     args = parser.parse_args()
     args.func(args)

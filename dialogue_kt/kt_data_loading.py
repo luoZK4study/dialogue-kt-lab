@@ -1,4 +1,5 @@
 from typing import Dict, List
+import numpy as np
 import pandas as pd
 import torch
 from torch.utils.data import Dataset, DataLoader
@@ -7,6 +8,8 @@ from sentence_transformers import SentenceTransformer
 
 from dialogue_kt.models.dkt_sem import ALT_ARCH
 from dialogue_kt.prompting import kt_system_prompt, kt_user_prompt, dkt_sem_prompt
+from dialogue_kt.prompting import kt_system_prompt_se, kt_user_prompt_se
+from dialogue_kt.prompting import kt_user_prompt_bayes, kt_user_prompt_informativeness
 from dialogue_kt.utils import device
 
 def apply_annotations(sample: dict, apply_na: bool = True):
@@ -114,10 +117,22 @@ class LMKTDatasetPacked(DatasetBase):
                 if skip_first_turn and is_first_turn:
                     is_first_turn = False
                     continue
+                from dialogue_kt.bayesian_epistemology import bayes_evidence_mask
+                from dialogue_kt.informativeness_search import informativeness_strengths
+                bayes_mode = getattr(args, "bayes_evidence", None)
+                info_mode = getattr(args, "informativeness", None)
+                user_content = kt_user_prompt(sample, dialogue, turn["turn"], None, args)
+                if bayes_mode:
+                    mask_mode = "adaptive" if bayes_mode == "adaptive_labels" else bayes_mode
+                    strengths = bayes_evidence_mask(len(dialogue), turn["turn"], mask_mode)
+                    user_content = kt_user_prompt_bayes(sample, dialogue, turn["turn"], None, strengths, args)
+                elif info_mode:
+                    strengths = informativeness_strengths(dialogue, turn["turn"], info_mode)
+                    user_content = kt_user_prompt_informativeness(sample, dialogue, turn["turn"], None, strengths, args)
                 # Create base prompt followed by all possible continuations
                 prompt = tokenizer.apply_chat_template([
                     {"role": "system", "content": kt_system_prompt(args)},
-                    {"role": "user", "content": kt_user_prompt(sample, dialogue, turn["turn"], None, args)},
+                    {"role": "user", "content": user_content},
                 ], tokenize=False)
                 kc_conts = [
                     tokenizer.apply_chat_template([
@@ -126,7 +141,20 @@ class LMKTDatasetPacked(DatasetBase):
                     ], tokenize=False)
                     for kc in turn["kcs"]
                 ]
-                kc_conts = [" " + cont.split("user<|end_header_id|>\n\n")[1] for cont in kc_conts]
+                # Build a template KC conversation to detect the chat template format
+                kc_template = tokenizer.apply_chat_template([
+                    {"role": "user", "content": "KC_PLACEHOLDER"},
+                    {"role": "assistant", "content": f"\n"}
+                ], tokenize=False)
+                # Find the user header end (last newline before the KC placeholder)
+                placeholder_idx = kc_template.find("KC_PLACEHOLDER")
+                if placeholder_idx < 0:
+                    raise ValueError(f"Cannot find KC placeholder in chat template: {kc_template[:100]}")
+                header_end_idx = kc_template.rfind("\n", 0, placeholder_idx)
+                if header_end_idx < 0:
+                    raise ValueError(f"Cannot find user header end in chat template: {kc_template[:100]}")
+                # Strip the user header prefix and add leading space
+                kc_conts = [" " + cont[header_end_idx + 1:] for cont in kc_conts]
                 prompt = prompt + "".join(kc_conts)
                 self.data.append({
                     "dialogue_idx": idx,
@@ -136,6 +164,185 @@ class LMKTDatasetPacked(DatasetBase):
                 })
         print(f"{failed} / {len(data)} dialogues failed processing")
         print(f"Number of data points: {len(self.data)}")
+
+
+class LMKTDatasetPackedSE(LMKTDatasetPacked):
+    """
+    SELFELICIT-enhanced packed dataset.
+
+    Extends LMKTDatasetPacked to mark evidence dialogue turns with
+    <start_important> / <end_important> markers based on pre-computed
+    SELFELICIT attention scores.
+
+    If evidence_annotations is None or empty for a sample, falls back to
+    standard prompting (no markers).
+    """
+
+    def __init__(self, data: 'pd.DataFrame', tokenizer, args,
+                 skip_first_turn: bool = False,
+                 evidence_annotations: dict = None):
+        from dialogue_kt.prompting import kt_system_prompt_se, kt_user_prompt_se
+        import numpy as np
+
+        self.data = []
+        self.evidence_annotations = evidence_annotations or {}
+        failed = 0
+
+        for idx, sample in data.iterrows():
+            dialogue = apply_annotations(sample)
+            if not dialogue:
+                failed += 1
+                continue
+
+            is_first_turn = True
+            for turn in dialogue:
+                if turn["correct"] is None:
+                    continue
+
+                if skip_first_turn and is_first_turn:
+                    is_first_turn = False
+                    continue
+
+                # Get evidence mask for this dialogue+turn
+                evidence_mask = self._get_evidence_mask(idx, turn["turn"], len(dialogue))
+
+                # Use SE system prompt (with evidence instructions) if evidence available,
+                # otherwise fall back to standard prompt
+                if evidence_mask is not None and evidence_mask.any():
+                    system_content = kt_system_prompt_se(args)
+                else:
+                    system_content = kt_system_prompt(args)
+
+                # Create base prompt with (possibly evidence-marked) dialogue
+                user_content = self._build_se_user_prompt(
+                    sample, dialogue, turn["turn"], evidence_mask, args
+                )
+
+                prompt = tokenizer.apply_chat_template([
+                    {"role": "system", "content": system_content},
+                    {"role": "user", "content": user_content},
+                ], tokenize=False)
+
+                kc_conts = [
+                    tokenizer.apply_chat_template([
+                        {"role": "user", "content": kc},
+                        {"role": "assistant", "content": f"\n"}
+                    ], tokenize=False)
+                    for kc in turn["kcs"]
+                ]
+
+                # Build a template KC conversation to detect the chat template format
+                kc_template = tokenizer.apply_chat_template([
+                    {"role": "user", "content": "KC_PLACEHOLDER"},
+                    {"role": "assistant", "content": f"\n"}
+                ], tokenize=False)
+
+                placeholder_idx = kc_template.find("KC_PLACEHOLDER")
+                if placeholder_idx < 0:
+                    raise ValueError(f"Cannot find KC placeholder in chat template: {kc_template[:100]}")
+                header_end_idx = kc_template.rfind("\n", 0, placeholder_idx)
+                if header_end_idx < 0:
+                    raise ValueError(f"Cannot find user header end in chat template: {kc_template[:100]}")
+
+                kc_conts = [" " + cont[header_end_idx + 1:] for cont in kc_conts]
+                prompt = prompt + "".join(kc_conts)
+
+                self.data.append({
+                    "dialogue_idx": idx,
+                    "prompt": prompt,
+                    "label": turn["correct"],
+                    "kcs": turn["kcs"]
+                })
+
+        print(f"{failed} / {len(data)} dialogues failed processing")
+        print(f"Number of data points: {len(self.data)}")
+
+    def _get_evidence_mask(self, dialogue_idx: int, turn_idx: int, n_turns: int):
+        """
+        Retrieve evidence mask for a given dialogue turn.
+
+        Priority:
+        1. Pre-computed SELFELICIT attention-based evidence (from cache)
+        2. Adaptive recency heuristic (fallback):
+           - Only mark evidence for turns with >= 4 prior turns (enough context)
+           - Window size: min(3, n_prior_turns) for late turns
+           - This avoids confusing the model when there's insufficient context
+        """
+        import numpy as np
+
+        # Try pre-computed evidence first
+        key = f"{dialogue_idx}_{turn_idx}"
+        if key in self.evidence_annotations:
+            ev_info = self.evidence_annotations[key]
+            if "evidence_mask" in ev_info and ev_info["evidence_mask"]:
+                mask = np.array(ev_info["evidence_mask"])
+                if len(mask) > n_turns:
+                    mask = mask[:n_turns]
+                elif len(mask) < n_turns:
+                    padded = np.zeros(n_turns, dtype=bool)
+                    padded[:len(mask)] = mask
+                    mask = padded
+                return mask
+
+        # Adaptive recency heuristic v2 (more conservative):
+        # - Only mark evidence when >= 5 prior turns exist
+        # - Use only 2-turn window for focused evidence
+        # - This minimizes noise while keeping key contextual signals
+        mask = np.zeros(n_turns, dtype=bool)
+        if turn_idx >= 5:
+            evidence_window = min(2, turn_idx)
+            start = max(0, turn_idx - evidence_window + 1)
+            mask[start:turn_idx + 1] = True
+        return mask
+
+    def _build_se_user_prompt(self, sample, dialogue, turn_idx, evidence_mask, args):
+        """Build user prompt with (possibly evidence-marked) dialogue."""
+        from dialogue_kt.prompting import kt_user_prompt, kt_user_prompt_se
+
+        if evidence_mask is not None and evidence_mask.any():
+            return kt_user_prompt_se(
+                sample, dialogue, turn_idx, None, evidence_mask, args
+            )
+        else:
+            return kt_user_prompt(sample, dialogue, turn_idx, None, args)
+
+
+def get_evidence_cache_filename(args, split: str = "train"):
+    """Get filename for cached evidence annotations."""
+    from dialogue_kt.data_loading import get_annotated_data_filename
+    base = get_annotated_data_filename(args, split)
+    return base.replace(".csv", "_evidence.json")
+
+
+def load_evidence_cache(args, split: str = "train") -> dict:
+    """Load cached evidence annotations from JSON file."""
+    import json
+    import os
+    cache_file = get_evidence_cache_filename(args, split)
+    if os.path.exists(cache_file):
+        with open(cache_file, "r") as f:
+            return json.load(f)
+    return {}
+
+
+def save_evidence_cache(evidence_dict: dict, args, split: str = "train"):
+    """Save evidence annotations to JSON cache file."""
+    import json
+    cache_file = get_evidence_cache_filename(args, split)
+    # Convert numpy arrays to lists for JSON serialization
+    serializable = {}
+    for key, val in evidence_dict.items():
+        if isinstance(val, dict):
+            serializable[key] = {
+                k: (v.tolist() if isinstance(v, np.ndarray) else v)
+                for k, v in val.items()
+            }
+        else:
+            serializable[key] = val
+    with open(cache_file, "w") as f:
+        json.dump(serializable, f, indent=2)
+    print(f"Evidence cache saved to {cache_file}")
+
 
 class LMKTCollatorPacked:
     def __init__(self, tokenizer):
