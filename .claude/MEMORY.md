@@ -39,16 +39,24 @@
 3.1 在 dialogue_kt/ 中实现核心模块（新增文件模块化，修改文件通过参数开关）
 3.2 在 main.py 添加新参数
 3.3 在 scripts/<paper_name>/ 存放分析/评估脚本
+3.4 git add + commit 代码变更（commit message 以论文名开头，如 "feat: <PaperName> integration"）
 ```
 
 ### 4. 训练验证
 ```
 4.1 rsync 代码到服务器
-4.2 运行基线训练（若无已有基线）
+4.2 以固定基准做比较：
+    - 论文 LLMKT (Llama-8B) Overall AUC = 76.71%
+    - 1.7B 复现 Overall AUC = 75.99%
+    无需每次重新训练基线
 4.3 每种方法训练 2 epochs（Epoch 2 过拟合则停，否则最多3）
 4.4 记录 Train Loss、Val Loss、过拟合判断
-4.5 收集 Overall AUC、Final Turn AUC
-4.6 若方法失败，分析原因并记录
+4.5 若结果异常（AUC≈50%、Loss极高、全部预测同一类别）：
+    首先排查代码bug → 修复后重新训练
+    → 确认非代码问题后再判定"方法无效"
+    （参考 SELFELICIT 经验：attention输出为空、token span匹配失败、import缺失）
+4.6 收集 Overall AUC、Final Turn AUC
+4.7 若方法失败且非bug，分析原因并记录
 ```
 
 ### 5. 结果整理
@@ -58,7 +66,7 @@
     ├── kcs/       # *.json
     ├── qual/      # *.csv
     └── <PaperName>_实验记录.md
-5.2 实验记录MD包含：论文简介、方法描述、结果表、代码变更、关键发现
+5.2 实验记录MD包含：论文简介、方法描述、结果表、代码变更、关键发现、bug修复记录
 5.3 模型保存到 saved_models/<paper_name>/
 ```
 
@@ -68,6 +76,8 @@
 6.2 更新 .claude/CLAUDE.md "已有结合"列表
 6.3 更新 .claude/STRUCTURE.md 如新增目录
 6.4 清理 results/ 冗余文件
+6.5 git add + commit 文档更新
+6.6 git push 到 GitHub
 ```
 
 ### 7. 交叉结合检查
