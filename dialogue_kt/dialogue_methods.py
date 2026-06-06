@@ -250,7 +250,7 @@ def kt_user_prompt_marked(sample: dict, dialogue_anno: List[dict], turn_idx: int
 
 
 def kt_user_prompt_method(sample: dict, dialogue_anno: List[dict], turn_idx: int, kc: Optional[str], args):
-    method = getattr(args, "kt_method", "base")
+    method = getattr(args, "kt_prompt_method", None) or getattr(args, "kt_method", "base")
     if method == "state_table" or (method == "dual_view_consistency" and getattr(args, "dual_view_type", "state_table") == "state_table"):
         return kt_user_prompt_state_table(sample, dialogue_anno, turn_idx, kc, args)
     if method == "solution_contrast" or (method == "dual_view_consistency" and getattr(args, "dual_view_type", "state_table") == "solution_contrast"):
