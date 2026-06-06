@@ -74,16 +74,16 @@ CUDA_VISIBLE_DEVICES=1 python -m dialogue_kt.main train \
 
 ## 实验结果
 
-SIP-Novelty 已完成；SIP-Novelty-Prune 仍在训练中。
+SIP-Novelty 与 SIP-Novelty-Prune 均已完成。
 
 | 方法 | Overall AUC | Final Turn AUC | vs 1.7B baseline 75.99 | vs paper 76.71 | 备注 |
 |------|:-----------:|:--------------:|:----------------------:|:--------------:|------|
 | SIP-Novelty | 75.99 | 76.85 | ±0.00 | -0.72 | Overall 与 baseline 持平；Final Turn 超过论文指标但目标看 Overall |
-| SIP-Novelty-Prune | — | — | — | — | 待运行 |
+| SIP-Novelty-Prune | 75.02 | 71.89 | -0.97 | -1.69 | pruning 删除了过多上下文，Overall/Final 均下降 |
 
 ## 当前结论
 
-SIP 是第二篇论文的轻量 prompt-side adaptation，优点是不需要额外 LLM 推理或 attention 输出，训练成本接近标准 LLMKT。它比 BEP 更直接针对“长对话中早期/中间证据被忽略”和“重复证据干扰”的问题，可能更适合 Dialogue-KT。
+SIP 是第二篇论文的轻量 prompt-side adaptation，优点是不需要额外 LLM 推理或 attention 输出，训练成本接近标准 LLMKT。完整实验显示：SIP-Novelty 的 Overall AUC 75.99，与 1.7B baseline 持平，但 Final Turn AUC 76.85 明显提升；SIP-Novelty-Prune 的 Overall AUC 75.02、Final Turn AUC 71.89，说明硬删除低信息 turn 会丢失必要上下文，不适合作为当前主方法。SIP 单模型暂不计入“Overall AUC 超过 76.71”的目标，但它与 baseline/BEP 的错误模式互补，适合作为后续 validation-selected ensemble 组件。
 
 
 ### Ensemble 探索
