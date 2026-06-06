@@ -70,7 +70,7 @@ def main():
         subparser.add_argument("--informativeness", type=str, choices=["novelty", "novelty_recent", "recent_grounded", "novelty_prune", "novelty_recent_prune", "recent_prune"], default=None,
                                help="Stepwise informativeness prompt mode: mark/prune underutilized non-redundant dialogue steps")
         subparser.add_argument("--kt_method", type=str,
-                               choices=["base", "state_table", "solution_contrast", "support_token", "hyper_chain", "quito_mark", "dac_mark", "mil_noisy_and", "rank_auc", "dual_view_consistency"],
+                               choices=["base", "state_table", "solution_contrast", "support_token", "hyper_chain", "quito_mark", "dac_mark", "mil_noisy_and", "rank_auc", "dual_view_consistency", "evidence_r1", "hyper_validate"],
                                default="base", help="Standalone trainable Dialogue-KT method variant")
         subparser.add_argument("--aux_loss_weight", type=float, default=0.2, help="Auxiliary loss weight for KT method variants")
         subparser.add_argument("--rank_loss_weight", type=float, default=0.1, help="Pairwise ranking loss weight")

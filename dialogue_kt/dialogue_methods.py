@@ -22,6 +22,12 @@ def method_system_instruction(args):
         return "Use the <important_context> markers as compressed high-value dialogue evidence while preserving the full causal dialogue context."
     if method == "dual_view_consistency":
         return "Make the same knowledge tracing judgment from raw dialogue and structured evidence views. Treat all evidence as causal history only."
+    if method == "evidence_r1":
+        from dialogue_kt.evidence_methods import method_system_instruction_evidence_r1
+        return method_system_instruction_evidence_r1(args)
+    if method == "hyper_validate":
+        from dialogue_kt.evidence_methods import method_system_instruction_hyper_validate
+        return method_system_instruction_hyper_validate(args)
     return ""
 
 
@@ -254,4 +260,10 @@ def kt_user_prompt_method(sample: dict, dialogue_anno: List[dict], turn_idx: int
         return kt_user_prompt_marked(sample, dialogue_anno, turn_idx, kc, args, "<relevant_context>", "</relevant_context>")
     if method == "dac_mark":
         return kt_user_prompt_marked(sample, dialogue_anno, turn_idx, kc, args, "<important_context>", "</important_context>")
+    if method == "evidence_r1":
+        from dialogue_kt.evidence_methods import kt_user_prompt_evidence_r1
+        return kt_user_prompt_evidence_r1(sample, dialogue_anno, turn_idx, kc, args)
+    if method == "hyper_validate":
+        from dialogue_kt.evidence_methods import kt_user_prompt_hyper_validate
+        return kt_user_prompt_hyper_validate(sample, dialogue_anno, turn_idx, kc, args)
     raise ValueError(f"Unsupported kt_method prompt: {method}")
