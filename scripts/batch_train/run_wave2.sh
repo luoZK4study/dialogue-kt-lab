@@ -30,24 +30,20 @@ with open('results/metrics_${model_name}.txt') as f:
     log ">>> $desc AUC = $auc"
 }
 
-log "======== WAVE 2: New Methods ========"
+log "======== WAVE 2: New Standalone Methods ========"
 
-# New standalone methods
+# New paper-inspired methods
 train_one "Evidence-R1 reasoning" "lmkt_evidence_r1_qwen3_1.7b" \
   --kt_method evidence_r1
 
 train_one "HypER chain validation" "lmkt_hyper_validate_qwen3_1.7b" \
   --kt_method hyper_validate
 
-# Prompt + label inclusion
+train_one "IBCircuit turn selection" "lmkt_ib_turns_qwen3_1.7b" \
+  --kt_method ib_turns
+
+# Simple but untested baseline variant
 train_one "Prompt with labels" "lmkt_prompt_labels_qwen3_1.7b" \
   --prompt_inc_labels 1
-
-log "======== WAVE 2: Best Combinations ========"
-# (Uncomment combinations based on wave 1 results)
-# train_one "StateTable+RankAUC" "lmkt_state_rank_qwen3_1.7b" \
-#   --kt_prompt_method state_table --kt_loss_method rank_auc --kt_method base
-# train_one "SolutionContrast+RankAUC" "lmkt_solcon_rank_qwen3_1.7b" \
-#   --kt_prompt_method solution_contrast --kt_loss_method rank_auc --kt_method base
 
 log "======== WAVE 2 DONE ========"
