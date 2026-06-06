@@ -288,7 +288,8 @@ def get_lmkt_loss_dual_view_consistency(model, batch, true_token, false_token, a
 
 
 def get_lmkt_loss_method(model, batch, true_token, false_token, args):
-    method = getattr(args, "kt_method", "base")
+    # Use kt_loss_method override if set, otherwise use kt_method
+    method = getattr(args, "kt_loss_method", None) or getattr(args, "kt_method", "base")
     if method == "mil_noisy_and":
         return get_lmkt_loss_mil_noisy_and(model, batch, true_token, false_token, args)
     if method == "rank_auc":
@@ -361,7 +362,8 @@ def train_lmkt(args, fold):
         KTDataset = LMKTDatasetPacked if args.pack_kcs else LMKTDatasetUnpacked
     KTCollator = LMKTCollatorPacked if args.pack_kcs else LMKTCollatorUnpacked
     get_loss = get_lmkt_loss_packed if args.pack_kcs else get_lmkt_loss_unpacked
-    if getattr(args, "kt_method", "base") != "base" and args.pack_kcs:
+    has_method = getattr(args, "kt_method", "base") != "base" or getattr(args, "kt_loss_method", None) or getattr(args, "kt_prompt_method", None)
+    if has_method and args.pack_kcs:
         get_loss = get_lmkt_loss_method
 
     # For SE-weighted mode, use the SE-specific loss function
@@ -463,7 +465,8 @@ def test_lmkt(args, fold):
         get_loss = get_lmkt_loss_se
     else:
         get_loss = get_lmkt_loss_packed if args.pack_kcs else get_lmkt_loss_unpacked
-    if getattr(args, "kt_method", "base") != "base" and args.pack_kcs and not use_se_inference and se_mode not in ("weighted", "combined"):
+        has_method = getattr(args, "kt_method", "base") != "base" or getattr(args, "kt_loss_method", None) or getattr(args, "kt_prompt_method", None)
+    if has_method and args.pack_kcs and not use_se_inference and se_mode not in ("weighted", "combined"):
         get_loss = get_lmkt_loss_method
 
     _, val_df, test_df = load_annotated_data(args, fold)

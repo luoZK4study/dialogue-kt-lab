@@ -72,6 +72,12 @@ def main():
         subparser.add_argument("--kt_method", type=str,
                                choices=["base", "state_table", "solution_contrast", "support_token", "hyper_chain", "quito_mark", "dac_mark", "mil_noisy_and", "rank_auc", "dual_view_consistency", "evidence_r1", "hyper_validate"],
                                default="base", help="Standalone trainable Dialogue-KT method variant")
+        subparser.add_argument("--kt_prompt_method", type=str,
+                               choices=["base", "state_table", "solution_contrast", "support_token", "hyper_chain", "quito_mark", "dac_mark", "evidence_r1", "hyper_validate"],
+                               default=None, help="Override prompt method (defaults to kt_method)")
+        subparser.add_argument("--kt_loss_method", type=str,
+                               choices=["base", "mil_noisy_and", "rank_auc", "dual_view_consistency"],
+                               default=None, help="Override loss method (defaults to kt_method)"))
         subparser.add_argument("--aux_loss_weight", type=float, default=0.2, help="Auxiliary loss weight for KT method variants")
         subparser.add_argument("--rank_loss_weight", type=float, default=0.1, help="Pairwise ranking loss weight")
         subparser.add_argument("--rank_margin", type=float, default=0.05, help="Pairwise ranking margin")

@@ -146,7 +146,7 @@ class LMKTDatasetPacked(DatasetBase):
                 from dialogue_kt.informativeness_search import informativeness_strengths
                 bayes_mode = getattr(args, "bayes_evidence", None)
                 info_mode = getattr(args, "informativeness", None)
-                kt_method = getattr(args, "kt_method", "base")
+                kt_method = getattr(args, "kt_prompt_method", None) or getattr(args, "kt_method", "base")
                 user_content = kt_user_prompt(sample, dialogue, turn["turn"], None, args)
                 if kt_method != "base":
                     from dialogue_kt.dialogue_methods import kt_user_prompt_method
