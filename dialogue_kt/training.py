@@ -296,6 +296,10 @@ def get_lmkt_loss_method(model, batch, true_token, false_token, args):
         return get_lmkt_loss_rank_auc(model, batch, true_token, false_token, args)
     if method == "dual_view_consistency" and "input_ids_view2" in batch:
         return get_lmkt_loss_dual_view_consistency(model, batch, true_token, false_token, args)
+    if method == "focal_loss":
+        return get_lmkt_loss_focal(model, batch, true_token, false_token, args)
+    if method == "margin_loss":
+        return get_lmkt_loss_margin(model, batch, true_token, false_token, args)
     return get_lmkt_loss_packed(model, batch, true_token, false_token, args)
 
 
@@ -928,3 +932,53 @@ def train_test_bkt(args, fold):
         all_preds.extend(preds[1:])
     metrics, _ = compute_all_metrics(0, all_labels, all_preds, None, None, args, fold)
     return [0, *metrics]
+
+# ===== Additional Loss Functions =====
+
+def get_lmkt_loss_focal(model, batch, true_token, false_token, args):
+    """
+    Focal loss for imbalanced classification.
+    Down-weights easy examples, focuses on hard ones.
+    gamma=2.0 gives strong focus on hard examples.
+    """
+    kc_probs, kc_probs_grouped = get_lmkt_probs_packed(model, batch, true_token, false_token, args)
+    corr_probs = aggregate_kc_probs(kc_probs, batch, args)
+    
+    labels = batch["labels"]
+    gamma = getattr(args, "focal_gamma", 2.0)
+    
+    # Focal loss: -alpha * (1-pt)^gamma * log(pt)
+    pt = torch.where(labels == 1, corr_probs, 1 - corr_probs)
+    focal_weight = (1 - pt) ** gamma
+    bce = torch.nn.functional.binary_cross_entropy(corr_probs.float(), labels, reduction='none')
+    loss = (focal_weight * bce).mean()
+    
+    return loss, kc_probs_grouped, corr_probs
+
+
+def get_lmkt_loss_margin(model, batch, true_token, false_token, args):
+    """
+    BCE loss with margin enforcement.
+    Predictions must be at least `margin` away from the decision boundary (0.5).
+    This encourages more confident, well-separated predictions.
+    """
+    kc_probs, kc_probs_grouped = get_lmkt_probs_packed(model, batch, true_token, false_token, args)
+    corr_probs = aggregate_kc_probs(kc_probs, batch, args)
+    
+    labels = batch["labels"]
+    margin = getattr(args, "rank_margin", 0.1)
+    
+    # Standard BCE
+    bce_loss = torch.nn.functional.binary_cross_entropy(corr_probs.float(), labels, reduction='none')
+    
+    # Margin penalty: push predictions away from 0.5
+    # For positive examples: penalize if prob < 0.5 + margin
+    # For negative examples: penalize if prob > 0.5 - margin
+    pos_penalty = torch.nn.functional.relu(0.5 + margin - corr_probs)
+    neg_penalty = torch.nn.functional.relu(corr_probs - (0.5 - margin))
+    margin_penalty = torch.where(labels == 1, pos_penalty, neg_penalty)
+    
+    alpha = getattr(args, "aux_loss_weight", 0.1)
+    loss = (bce_loss + alpha * margin_penalty).mean()
+    
+    return loss, kc_probs_grouped, corr_probs

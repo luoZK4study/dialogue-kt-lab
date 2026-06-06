@@ -70,19 +70,20 @@ def main():
         subparser.add_argument("--informativeness", type=str, choices=["novelty", "novelty_recent", "recent_grounded", "novelty_prune", "novelty_recent_prune", "recent_prune"], default=None,
                                help="Stepwise informativeness prompt mode: mark/prune underutilized non-redundant dialogue steps")
         subparser.add_argument("--kt_method", type=str,
-                               choices=["base", "state_table", "solution_contrast", "support_token", "hyper_chain", "quito_mark", "dac_mark", "mil_noisy_and", "rank_auc", "dual_view_consistency", "evidence_r1", "hyper_validate", "ib_turns"],
+                               choices=["base", "state_table", "solution_contrast", "support_token", "hyper_chain", "quito_mark", "dac_mark", "mil_noisy_and", "rank_auc", "dual_view_consistency", "focal_loss", "margin_loss", "evidence_r1", "hyper_validate", "ib_turns"],
                                default="base", help="Standalone trainable Dialogue-KT method variant")
         subparser.add_argument("--kt_prompt_method", type=str,
                                choices=["base", "state_table", "solution_contrast", "support_token", "hyper_chain", "quito_mark", "dac_mark", "evidence_r1", "hyper_validate", "ib_turns"],
                                default=None, help="Override prompt method (defaults to kt_method)")
         subparser.add_argument("--kt_loss_method", type=str,
-                               choices=["base", "mil_noisy_and", "rank_auc", "dual_view_consistency"],
-                               default=None, help="Override loss method (defaults to kt_method)"))
+                               choices=["base", "mil_noisy_and", "rank_auc", "dual_view_consistency", "focal_loss", "margin_loss"],
+                               default=None, help="Override loss method (defaults to kt_method)")
         subparser.add_argument("--aux_loss_weight", type=float, default=0.2, help="Auxiliary loss weight for KT method variants")
         subparser.add_argument("--rank_loss_weight", type=float, default=0.1, help="Pairwise ranking loss weight")
         subparser.add_argument("--rank_margin", type=float, default=0.05, help="Pairwise ranking margin")
         subparser.add_argument("--state_top_k", type=int, default=8, help="Maximum rows in state-table prompts")
         subparser.add_argument("--consistency_weight", type=float, default=0.15, help="Dual-view consistency loss weight")
+        subparser.add_argument("--focal_gamma", type=float, default=2.0, help="Focal loss gamma parameter")
         subparser.add_argument("--dual_view_type", type=str, choices=["state_table", "solution_contrast"], default="state_table", help="Second view for dual-view consistency")
 
     args = parser.parse_args()
