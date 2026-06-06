@@ -153,7 +153,7 @@ class LMKTDatasetPacked(DatasetBase):
                     if kt_method == "dual_view_consistency":
                         user_content = kt_user_prompt(sample, dialogue, turn["turn"], None, args)
                         user_content_view2 = kt_user_prompt_method(sample, dialogue, turn["turn"], None, args)
-                    elif kt_method in ("mil_noisy_and", "rank_auc"):
+                    elif kt_method in ("mil_noisy_and", "rank_auc", "focal_loss", "margin_loss"):
                         pass
                     else:
                         user_content = kt_user_prompt_method(sample, dialogue, turn["turn"], None, args)
