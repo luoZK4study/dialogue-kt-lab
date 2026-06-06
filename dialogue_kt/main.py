@@ -70,10 +70,10 @@ def main():
         subparser.add_argument("--informativeness", type=str, choices=["novelty", "novelty_recent", "recent_grounded", "novelty_prune", "novelty_recent_prune", "recent_prune"], default=None,
                                help="Stepwise informativeness prompt mode: mark/prune underutilized non-redundant dialogue steps")
         subparser.add_argument("--kt_method", type=str,
-                               choices=["base", "state_table", "solution_contrast", "support_token", "hyper_chain", "quito_mark", "dac_mark", "mil_noisy_and", "rank_auc", "dual_view_consistency", "evidence_r1", "hyper_validate"],
+                               choices=["base", "state_table", "solution_contrast", "support_token", "hyper_chain", "quito_mark", "dac_mark", "mil_noisy_and", "rank_auc", "dual_view_consistency", "evidence_r1", "hyper_validate", "ib_turns"],
                                default="base", help="Standalone trainable Dialogue-KT method variant")
         subparser.add_argument("--kt_prompt_method", type=str,
-                               choices=["base", "state_table", "solution_contrast", "support_token", "hyper_chain", "quito_mark", "dac_mark", "evidence_r1", "hyper_validate"],
+                               choices=["base", "state_table", "solution_contrast", "support_token", "hyper_chain", "quito_mark", "dac_mark", "evidence_r1", "hyper_validate", "ib_turns"],
                                default=None, help="Override prompt method (defaults to kt_method)")
         subparser.add_argument("--kt_loss_method", type=str,
                                choices=["base", "mil_noisy_and", "rank_auc", "dual_view_consistency"],

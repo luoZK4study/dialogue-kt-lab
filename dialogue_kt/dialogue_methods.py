@@ -28,6 +28,9 @@ def method_system_instruction(args):
     if method == "hyper_validate":
         from dialogue_kt.evidence_methods import method_system_instruction_hyper_validate
         return method_system_instruction_hyper_validate(args)
+    if method == "ib_turns":
+        from dialogue_kt.ib_methods import method_system_instruction_ib_turns
+        return method_system_instruction_ib_turns(args)
     return ""
 
 
@@ -266,4 +269,7 @@ def kt_user_prompt_method(sample: dict, dialogue_anno: List[dict], turn_idx: int
     if method == "hyper_validate":
         from dialogue_kt.evidence_methods import kt_user_prompt_hyper_validate
         return kt_user_prompt_hyper_validate(sample, dialogue_anno, turn_idx, kc, args)
+    if method == "ib_turns":
+        from dialogue_kt.ib_methods import kt_user_prompt_ib_turns
+        return kt_user_prompt_ib_turns(sample, dialogue_anno, turn_idx, kc, args)
     raise ValueError(f"Unsupported kt_method prompt: {method}")
