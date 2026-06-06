@@ -101,6 +101,31 @@ class LMKTCollatorUnpacked:
         }
 
 class LMKTDatasetPacked(DatasetBase):
+    def _build_packed_prompt(self, tokenizer, system_content: str, user_content: str, kcs: List[str]):
+        prompt = tokenizer.apply_chat_template([
+            {"role": "system", "content": system_content},
+            {"role": "user", "content": user_content},
+        ], tokenize=False)
+        kc_conts = [
+            tokenizer.apply_chat_template([
+                {"role": "user", "content": kc},
+                {"role": "assistant", "content": f"\n"}
+            ], tokenize=False)
+            for kc in kcs
+        ]
+        kc_template = tokenizer.apply_chat_template([
+            {"role": "user", "content": "KC_PLACEHOLDER"},
+            {"role": "assistant", "content": f"\n"}
+        ], tokenize=False)
+        placeholder_idx = kc_template.find("KC_PLACEHOLDER")
+        if placeholder_idx < 0:
+            raise ValueError(f"Cannot find KC placeholder in chat template: {kc_template[:100]}")
+        header_end_idx = kc_template.rfind("\n", 0, placeholder_idx)
+        if header_end_idx < 0:
+            raise ValueError(f"Cannot find user header end in chat template: {kc_template[:100]}")
+        kc_conts = [" " + cont[header_end_idx + 1:] for cont in kc_conts]
+        return prompt + "".join(kc_conts)
+
     def __init__(self, data: pd.DataFrame, tokenizer, args, skip_first_turn: bool = False):
         self.data = []
         failed = 0
@@ -121,47 +146,34 @@ class LMKTDatasetPacked(DatasetBase):
                 from dialogue_kt.informativeness_search import informativeness_strengths
                 bayes_mode = getattr(args, "bayes_evidence", None)
                 info_mode = getattr(args, "informativeness", None)
+                kt_method = getattr(args, "kt_method", "base")
                 user_content = kt_user_prompt(sample, dialogue, turn["turn"], None, args)
-                if bayes_mode:
+                if kt_method != "base":
+                    from dialogue_kt.dialogue_methods import kt_user_prompt_method
+                    if kt_method == "dual_view_consistency":
+                        user_content = kt_user_prompt(sample, dialogue, turn["turn"], None, args)
+                        user_content_view2 = kt_user_prompt_method(sample, dialogue, turn["turn"], None, args)
+                    elif kt_method in ("mil_noisy_and", "rank_auc"):
+                        pass
+                    else:
+                        user_content = kt_user_prompt_method(sample, dialogue, turn["turn"], None, args)
+                elif bayes_mode:
                     mask_mode = "adaptive" if bayes_mode == "adaptive_labels" else bayes_mode
                     strengths = bayes_evidence_mask(len(dialogue), turn["turn"], mask_mode)
                     user_content = kt_user_prompt_bayes(sample, dialogue, turn["turn"], None, strengths, args)
                 elif info_mode:
                     strengths = informativeness_strengths(dialogue, turn["turn"], info_mode)
                     user_content = kt_user_prompt_informativeness(sample, dialogue, turn["turn"], None, strengths, args)
-                # Create base prompt followed by all possible continuations
-                prompt = tokenizer.apply_chat_template([
-                    {"role": "system", "content": kt_system_prompt(args)},
-                    {"role": "user", "content": user_content},
-                ], tokenize=False)
-                kc_conts = [
-                    tokenizer.apply_chat_template([
-                        {"role": "user", "content": kc},
-                        {"role": "assistant", "content": f"\n"} # Newline would precede True or False prediction
-                    ], tokenize=False)
-                    for kc in turn["kcs"]
-                ]
-                # Build a template KC conversation to detect the chat template format
-                kc_template = tokenizer.apply_chat_template([
-                    {"role": "user", "content": "KC_PLACEHOLDER"},
-                    {"role": "assistant", "content": f"\n"}
-                ], tokenize=False)
-                # Find the user header end (last newline before the KC placeholder)
-                placeholder_idx = kc_template.find("KC_PLACEHOLDER")
-                if placeholder_idx < 0:
-                    raise ValueError(f"Cannot find KC placeholder in chat template: {kc_template[:100]}")
-                header_end_idx = kc_template.rfind("\n", 0, placeholder_idx)
-                if header_end_idx < 0:
-                    raise ValueError(f"Cannot find user header end in chat template: {kc_template[:100]}")
-                # Strip the user header prefix and add leading space
-                kc_conts = [" " + cont[header_end_idx + 1:] for cont in kc_conts]
-                prompt = prompt + "".join(kc_conts)
-                self.data.append({
+                prompt = self._build_packed_prompt(tokenizer, kt_system_prompt(args), user_content, turn["kcs"])
+                sample_dict = {
                     "dialogue_idx": idx,
                     "prompt": prompt,
                     "label": turn["correct"],
                     "kcs": turn["kcs"]
-                })
+                }
+                if kt_method == "dual_view_consistency":
+                    sample_dict["prompt_view2"] = self._build_packed_prompt(tokenizer, kt_system_prompt(args), user_content_view2, turn["kcs"])
+                self.data.append(sample_dict)
         print(f"{failed} / {len(data)} dialogues failed processing")
         print(f"Number of data points: {len(self.data)}")
 
@@ -348,8 +360,7 @@ class LMKTCollatorPacked:
     def __init__(self, tokenizer):
         self.tokenizer = tokenizer
 
-    def __call__(self, batch):
-        prompts = [sample["prompt"] for sample in batch]
+    def _collate_prompts(self, prompts):
         prompts_tokenized = self.tokenizer(prompts, return_tensors="pt", padding=True)
         input_ids = prompts_tokenized.input_ids.to(device)
         batch_size, max_seq_len = input_ids.shape
@@ -383,15 +394,30 @@ class LMKTCollatorPacked:
 
         # Get index of token before eos for each KC, pad for easier loss computation
         last_idxs = pad_sequence([idxs[3::2] - 1 for idxs in eos_idxs], batch_first=True)
-        return {
+        return input_ids, attention_mask.unsqueeze(1).to(device), position_ids.to(device), last_idxs
+
+    def __call__(self, batch):
+        prompts = [sample["prompt"] for sample in batch]
+        input_ids, attention_mask, position_ids, last_idxs = self._collate_prompts(prompts)
+        result = {
             "input_ids": input_ids,
-            "attention_mask": attention_mask.unsqueeze(1).to(device), # Add singleton head dimension
-            "position_ids": position_ids.to(device),
+            "attention_mask": attention_mask,
+            "position_ids": position_ids,
             "last_idxs": last_idxs,
             "num_kcs": torch.LongTensor([len(sample["kcs"]) for sample in batch]).to(device),
             "labels": torch.Tensor([sample["label"] for sample in batch]).to(device),
             "meta_data": batch
         }
+        if "prompt_view2" in batch[0]:
+            prompts_view2 = [sample["prompt_view2"] for sample in batch]
+            input_ids2, attention_mask2, position_ids2, last_idxs2 = self._collate_prompts(prompts_view2)
+            result.update({
+                "input_ids_view2": input_ids2,
+                "attention_mask_view2": attention_mask2,
+                "position_ids_view2": position_ids2,
+                "last_idxs_view2": last_idxs2,
+            })
+        return result
 
 class DKTDataset(DatasetBase):
     def __init__(self, data: pd.DataFrame, kc_dict: Dict[str, int], kc_emb_matrix: torch.Tensor, sbert_model: SentenceTransformer):

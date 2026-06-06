@@ -136,6 +136,12 @@ KT_SYSTEM_PROMPT = """You are an experienced math teacher. You are given a dialo
 def kt_system_prompt(args):
     prompt = KT_SYSTEM_PROMPT.format(desc=get_dataset_desc(args))
     extra_instructions = []
+    kt_method = getattr(args, "kt_method", "base")
+    if kt_method != "base":
+        from dialogue_kt.dialogue_methods import method_system_instruction
+        instruction = method_system_instruction(args)
+        if instruction:
+            extra_instructions.append(instruction)
     if getattr(args, "bayes_evidence", None):
         from dialogue_kt.bayesian_epistemology import bayesian_system_instruction
         extra_instructions.append(bayesian_system_instruction(

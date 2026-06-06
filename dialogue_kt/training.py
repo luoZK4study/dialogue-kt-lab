@@ -194,34 +194,108 @@ def get_lmkt_loss_unpacked(model, batch, true_token, false_token, args):
     loss = torch.nn.BCELoss()(corr_probs.float(), batch["labels"])
     return loss, kc_probs_grouped, corr_probs
 
-def get_lmkt_loss_packed(model, batch, true_token, false_token, args):
+def get_lmkt_probs_packed(model, batch, true_token, false_token, args, suffix=""):
     # Invert attention mask
-    attention_mask = batch["attention_mask"]
+    attention_mask = batch[f"attention_mask{suffix}"]
     min_dtype = torch.finfo(model.dtype).min
     attention_mask[attention_mask == 0] = min_dtype
     attention_mask[attention_mask == 1] = 0
     attention_mask = attention_mask.type(model.dtype)
     # Get logits at last token of each sequence
-    model_output = model(input_ids=batch["input_ids"], attention_mask=attention_mask, position_ids=batch["position_ids"])
+    model_output = model(input_ids=batch[f"input_ids{suffix}"], attention_mask=attention_mask, position_ids=batch[f"position_ids{suffix}"])
     batch_size = model_output.logits.shape[0]
-    logits = model_output.logits[torch.arange(batch_size).unsqueeze(1), batch["last_idxs"]]
+    logits = model_output.logits[torch.arange(batch_size).unsqueeze(1), batch[f"last_idxs{suffix}"]]
     # Return probability of True token over False token for each sequence
     logits = torch.stack([logits[:, :, true_token], logits[:, :, false_token]], dim=2)
     kc_probs = torch.softmax(logits, dim=2)[:, :, 0]
-    # Get probability that all KCs are True for each turn in the batch
     kc_probs_grouped = [probs[:num_kcs].tolist() for probs, num_kcs in zip(kc_probs, batch["num_kcs"])]
-    # Set probs on padded indices
+    return kc_probs, kc_probs_grouped
+
+
+def aggregate_kc_probs(kc_probs, batch, args, suffix=""):
     padding_val = 0 if args.agg == "mean-ar" else 1
-    kc_probs = torch.masked_scatter(kc_probs, batch["last_idxs"].to(device) == 0, torch.full_like(kc_probs, padding_val).to(device))
-    # Get BCE loss with correctness labels and predicted probabilities
+    kc_probs = torch.masked_scatter(kc_probs, batch[f"last_idxs{suffix}"].to(device) == 0, torch.full_like(kc_probs, padding_val).to(device))
     if args.agg == "prod":
         corr_probs = kc_probs.prod(dim=1)
     elif args.agg == "mean-ar":
         corr_probs = kc_probs.sum(dim=1) / batch["num_kcs"]
     elif args.agg == "mean-geo":
         corr_probs = kc_probs.prod(dim=1) ** (1 / batch["num_kcs"])
+    return corr_probs
+
+
+def get_lmkt_loss_packed(model, batch, true_token, false_token, args):
+    kc_probs, kc_probs_grouped = get_lmkt_probs_packed(model, batch, true_token, false_token, args)
+    corr_probs = aggregate_kc_probs(kc_probs, batch, args)
     loss = torch.nn.BCELoss()(corr_probs.float(), batch["labels"])
     return loss, kc_probs_grouped, corr_probs
+
+
+def get_lmkt_loss_mil_noisy_and(model, batch, true_token, false_token, args):
+    kc_probs, kc_probs_grouped = get_lmkt_probs_packed(model, batch, true_token, false_token, args)
+    valid_mask = batch["last_idxs"].to(device) != 0
+    eps = 1e-6
+    log_p = torch.log(kc_probs.clamp(eps, 1 - eps))
+    log_p = torch.masked_fill(log_p, ~valid_mask, 0)
+    mean_log_p = log_p.sum(dim=1) / batch["num_kcs"]
+    all_mastered = torch.exp(mean_log_p)
+    labels = batch["labels"]
+    pos_loss = -(log_p.sum(dim=1) / batch["num_kcs"])
+    neg_loss = -torch.log((1 - all_mastered).clamp(eps, 1 - eps))
+    mil_loss = (labels * pos_loss + (1 - labels) * neg_loss).mean()
+    bce_loss = torch.nn.BCELoss()(all_mastered.float(), labels)
+    loss = (1 - args.aux_loss_weight) * mil_loss + args.aux_loss_weight * bce_loss
+    return loss, kc_probs_grouped, all_mastered
+
+
+def get_lmkt_loss_rank_auc(model, batch, true_token, false_token, args):
+    loss, kc_probs_grouped, corr_probs = get_lmkt_loss_packed(model, batch, true_token, false_token, args)
+    labels = batch["labels"]
+    pos = corr_probs[labels == 1]
+    neg = corr_probs[labels == 0]
+    rank_terms = []
+    if len(pos) and len(neg):
+        rank_terms.append(torch.nn.functional.softplus(args.rank_margin - pos[:, None] + neg[None, :]).mean())
+    if not hasattr(args, "_rank_pos_queue"):
+        args._rank_pos_queue = []
+        args._rank_neg_queue = []
+    if len(pos) and args._rank_neg_queue:
+        qneg = torch.tensor(args._rank_neg_queue, device=device, dtype=corr_probs.dtype)
+        rank_terms.append(torch.nn.functional.softplus(args.rank_margin - pos[:, None] + qneg[None, :]).mean())
+    if len(neg) and args._rank_pos_queue:
+        qpos = torch.tensor(args._rank_pos_queue, device=device, dtype=corr_probs.dtype)
+        rank_terms.append(torch.nn.functional.softplus(args.rank_margin - qpos[:, None] + neg[None, :]).mean())
+    if rank_terms:
+        loss = loss + args.rank_loss_weight * torch.stack(rank_terms).mean()
+    for score, label in zip(corr_probs.detach().cpu().tolist(), labels.detach().cpu().tolist()):
+        queue = args._rank_pos_queue if label == 1 else args._rank_neg_queue
+        queue.append(float(score))
+        if len(queue) > 128:
+            del queue[0]
+    return loss, kc_probs_grouped, corr_probs
+
+
+def get_lmkt_loss_dual_view_consistency(model, batch, true_token, false_token, args):
+    loss1, kc_probs_grouped, corr_probs1 = get_lmkt_loss_packed(model, batch, true_token, false_token, args)
+    kc_probs2, _ = get_lmkt_probs_packed(model, batch, true_token, false_token, args, suffix="_view2")
+    corr_probs2 = aggregate_kc_probs(kc_probs2, batch, args, suffix="_view2")
+    loss2 = torch.nn.BCELoss()(corr_probs2.float(), batch["labels"])
+    p1 = corr_probs1.clamp(1e-4, 1 - 1e-4)
+    p2 = corr_probs2.clamp(1e-4, 1 - 1e-4)
+    consistency = torch.nn.functional.mse_loss(torch.logit(p1), torch.logit(p2))
+    loss = 0.5 * (loss1 + loss2) + args.consistency_weight * consistency
+    return loss, kc_probs_grouped, corr_probs1
+
+
+def get_lmkt_loss_method(model, batch, true_token, false_token, args):
+    method = getattr(args, "kt_method", "base")
+    if method == "mil_noisy_and":
+        return get_lmkt_loss_mil_noisy_and(model, batch, true_token, false_token, args)
+    if method == "rank_auc":
+        return get_lmkt_loss_rank_auc(model, batch, true_token, false_token, args)
+    if method == "dual_view_consistency" and "input_ids_view2" in batch:
+        return get_lmkt_loss_dual_view_consistency(model, batch, true_token, false_token, args)
+    return get_lmkt_loss_packed(model, batch, true_token, false_token, args)
 
 
 def get_lmkt_loss_se(model, batch, true_token, false_token, args):
@@ -287,6 +361,8 @@ def train_lmkt(args, fold):
         KTDataset = LMKTDatasetPacked if args.pack_kcs else LMKTDatasetUnpacked
     KTCollator = LMKTCollatorPacked if args.pack_kcs else LMKTCollatorUnpacked
     get_loss = get_lmkt_loss_packed if args.pack_kcs else get_lmkt_loss_unpacked
+    if getattr(args, "kt_method", "base") != "base" and args.pack_kcs:
+        get_loss = get_lmkt_loss_method
 
     # For SE-weighted mode, use the SE-specific loss function
     if se_mode in ("weighted", "combined"):
@@ -387,6 +463,8 @@ def test_lmkt(args, fold):
         get_loss = get_lmkt_loss_se
     else:
         get_loss = get_lmkt_loss_packed if args.pack_kcs else get_lmkt_loss_unpacked
+    if getattr(args, "kt_method", "base") != "base" and args.pack_kcs and not use_se_inference and se_mode not in ("weighted", "combined"):
+        get_loss = get_lmkt_loss_method
 
     _, val_df, test_df = load_annotated_data(args, fold)
     if args.testonval:
