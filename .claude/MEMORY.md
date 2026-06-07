@@ -99,8 +99,8 @@
 | Wang_2025_Stepwise_Informativeness_Search | evidence_rationale_extraction | ✅ GitHub | ✅ 已验证 |
 | Kim_2025_From_Evidence_to_Belief | evidence_rationale_extraction | ✅ GitHub | ✅ 已验证 |
 | Wu_2025_Expert_Heads | evidence_rationale_extraction | ✅ GitHub | ⏭️ 已跳过 |
-| Vasu_2025_HypER | evidence_rationale_extraction | — | ✅ 已编码 |
-| Evidence-R1_2025 | evidence_rationale_extraction | — | ✅ 已编码 |
+| Vasu_2025_HypER | evidence_rationale_extraction | — | ✅ 已验证 (74.38%) |
+| Evidence-R1_2025 | evidence_rationale_extraction | — | ✅ 已验证 (75.60%) |
 | Bian_2025_IBCircuit | information_bottleneck | — | ✅ 已验证 |
 | Conklin_2026_Learning_is_Forgetting | information_bottleneck | — | 📋 待处理 |
 | Oh_2025_Vittle | information_bottleneck | — | 📋 待处理 |
@@ -109,7 +109,7 @@
 | Kim_2025_KVzip | representation_information_compression | — | 📋 待处理 |
 | Li_2025_500xCompressor | representation_information_compression | — | 📋 待处理 |
 | Zhang_2026_LLM2Comp | representation_information_compression | — | 📋 待处理 |
-| Zhao_2025_DAC | representation_information_compression | — | ✅ 已编码 |
+| Zhao_2025_DAC | representation_information_compression | — | ✅ 已验证 (75.87%) |
 
 > 状态说明：📋待处理 → ✅已编码 → 🔄进行中 → ✅已验证 → ⏭️已跳过(不适用)
 
@@ -216,17 +216,24 @@
 
 所有基于 Qwen3-1.7B 的单模型方法（包括 prompt 修改和 loss 修改）均无法超越 baseline 75.99% 或论文 76.71%：
 
-| 方法 | Overall AUC | vs Baseline |
-|------|:---:|:---:|
-| baseline | 75.99% | — |
-| rank_auc_strong | 75.78% | -0.21% |
-| margin_loss | 75.72% | -0.27% |
-| mil_noisy_and | 75.68% | -0.31% |
-| rank_auc | 75.56% | -0.43% |
-| support_token | 75.53% | -0.46% |
-| focal_loss | 75.13% | -0.86% |
+| 方法 | Overall AUC | vs Baseline | 类型 |
+|------|:---:|:---:|------|
+| baseline / prompt_labels | 75.99% | — | 基准 |
+| dac_mark | 75.87% | -0.12% | prompt (DAC) |
+| rank_auc_strong | 75.78% | -0.21% | loss (ranking w=0.3) |
+| margin_loss | 75.72% | -0.27% | loss (margin) |
+| mil_noisy_and | 75.68% | -0.31% | loss (MIL) |
+| evidence_r1 | 75.60% | -0.39% | prompt (Evidence-R1) |
+| rank_auc | 75.56% | -0.43% | loss (ranking w=0.1) |
+| support_token | 75.53% | -0.46% | prompt |
+| focal_loss | 75.13% | -0.86% | loss (focal) |
+| ib_turns | 74.94% | -1.05% | prompt (IBCircuit) |
+| hyper_validate | 74.38% | -1.61% | prompt (HypER) |
 
-**结论**: Qwen3-1.7B 在此任务上已达容量上限。超越论文 76.71% 需通过 validation-selected ensemble 方法。
+**结论**: 共测试 11 个单模型方法，全部在 74.38-75.99% 范围。Qwen3-1.7B 在此任务上已达容量上限。超越论文 76.71% 需通过 validation-selected ensemble 方法。
+
+> **Expert Heads 诊断** (2026-06-07): verdict=FAIL，0 candidates。小模型注意力极均匀。
+> **组合方法** (state_table+rank_auc, solution_contrast+rank_auc): 因 routing bug 未完成训练，但基于单模型模式，预期仍在 75-76% 范围。
 
 ---
 
