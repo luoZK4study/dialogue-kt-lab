@@ -98,20 +98,22 @@
 | Liu_2025_SelfElicit | evidence_rationale_extraction | ✅ GitHub | ✅ 已验证 |
 | Wang_2025_Stepwise_Informativeness_Search | evidence_rationale_extraction | ✅ GitHub | ✅ 已验证 |
 | Kim_2025_From_Evidence_to_Belief | evidence_rationale_extraction | ✅ GitHub | ✅ 已验证 |
-| Wu_2025_Expert_Heads | evidence_rationale_extraction | ✅ GitHub | 🔄 进行中 |
-| Vasu_2025_HypER | evidence_rationale_extraction | — | 📋 待处理 |
-| Evidence-R1_2025 | evidence_rationale_extraction | — | 📋 待处理 |
-| Bian_2025_IBCircuit | information_bottleneck | — | 📋 待处理 |
+| Wu_2025_Expert_Heads | evidence_rationale_extraction | ✅ GitHub | ⏭️ 已跳过 |
+| Vasu_2025_HypER | evidence_rationale_extraction | — | ✅ 已编码 |
+| Evidence-R1_2025 | evidence_rationale_extraction | — | ✅ 已编码 |
+| Bian_2025_IBCircuit | information_bottleneck | — | ✅ 已验证 |
 | Conklin_2026_Learning_is_Forgetting | information_bottleneck | — | 📋 待处理 |
 | Oh_2025_Vittle | information_bottleneck | — | 📋 待处理 |
-| Wang_2025_QUITO-X | information_bottleneck | — | 📋 待处理 |
+| Wang_2025_QUITO-X | information_bottleneck | — | ✅ 已编码 |
 | Dai_2025_Pretraining_Context_Compressor | representation_information_compression | — | 📋 待处理 |
 | Kim_2025_KVzip | representation_information_compression | — | 📋 待处理 |
 | Li_2025_500xCompressor | representation_information_compression | — | 📋 待处理 |
 | Zhang_2026_LLM2Comp | representation_information_compression | — | 📋 待处理 |
-| Zhao_2025_DAC | representation_information_compression | — | 📋 待处理 |
+| Zhao_2025_DAC | representation_information_compression | — | ✅ 已编码 |
 
-> 状态说明：📋待处理 → 🔄进行中 → ✅已验证 → ⏭️已跳过(无代码)
+> 状态说明：📋待处理 → ✅已编码 → 🔄进行中 → ✅已验证 → ⏭️已跳过(不适用)
+
+> **Expert Heads 诊断结论** (2026-06-07): 在 Qwen3-1.7B 上运行了注意力诊断 (`scripts/expert_heads/diagnose_turn_attention.py`)，结果 verdict=FAIL，0 个 stable expert heads。与 SELFELICIT 发现一致——小模型注意力极均匀。已跳过实现。
 
 ---
 
