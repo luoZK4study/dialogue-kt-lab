@@ -103,6 +103,8 @@ def compute_evidence_quality(turn_attentions, labels, n_evidence=3):
 
 
 def main():
+    # Force eager attention - sdpa does not support output_attentions
+    os.environ["SDPA_ATTENTION_BACKEND"] = "eager"
     parser = argparse.ArgumentParser()
     parser.add_argument("--base_model", default="/home/user4/.cache/huggingface/hub/qwen/Qwen3-1.7B")
     parser.add_argument("--checkpoint", default="lmkt_qwen3_1.7b")
