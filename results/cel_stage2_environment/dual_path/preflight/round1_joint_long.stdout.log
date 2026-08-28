@@ -1,22 +1,0 @@
-Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   1%|          | 2/311 [00:00<00:26, 11.52it/s]Loading weights:  10%|█         | 32/311 [00:00<00:01, 139.70it/s]Loading weights:  21%|██        | 65/311 [00:00<00:01, 212.83it/s]Loading weights:  29%|██▉       | 90/311 [00:00<00:01, 213.91it/s]Loading weights:  37%|███▋      | 114/311 [00:00<00:00, 218.15it/s]Loading weights:  44%|████▍     | 138/311 [00:00<00:00, 220.31it/s]Loading weights:  52%|█████▏    | 161/311 [00:00<00:00, 216.80it/s]Loading weights:  59%|█████▉    | 184/311 [00:00<00:00, 210.84it/s]Loading weights:  66%|██████▌   | 206/311 [00:01<00:00, 202.09it/s]Loading weights:  73%|███████▎  | 227/311 [00:01<00:00, 191.66it/s]Loading weights:  79%|███████▉  | 247/311 [00:01<00:00, 191.41it/s]Loading weights:  87%|████████▋ | 270/311 [00:01<00:00, 199.51it/s]Loading weights:  95%|█████████▌| 296/311 [00:01<00:00, 216.12it/s]Loading weights: 100%|██████████| 311/311 [00:01<00:00, 202.42it/s]
-/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/torch/utils/checkpoint.py:295: FutureWarning: `torch.cpu.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cpu', args...)` instead.
-  with torch.enable_grad(), device_autocast_ctx, torch.cpu.amp.autocast(**ctx.cpu_autocast_kwargs):  # type: ignore[attr-defined]
-/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/torch/utils/checkpoint.py:1399: FutureWarning: `torch.cpu.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cpu', args...)` instead.
-  with device_autocast_ctx, torch.cpu.amp.autocast(**cpu_autocast_kwargs), recompute_context:  # type: ignore[attr-defined]
-/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/torch/autograd/graph.py:769: UserWarning: Memory Efficient attention defaults to a non-deterministic algorithm. To explicitly enable determinism call torch.use_deterministic_algorithms(True, warn_only=False). (Triggered internally at ../aten/src/ATen/native/transformers/cuda/attention_backward.cu:619.)
-  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
-Initializing trainable model with new LoRA adapters
-CEL joint training enabled: 79,362,562 / 1,799,937,538 parameters trainable
-15 / 1802 dialogues failed processing
-Number of data points: 8425
-Real-Qwen dual-path preflight passed
-selected_sample_index=2005
-selected_max_tokens=2255
-train_mode=joint
-input_rows=2
-sequence_length=2255
-train_loss=3.254008
-eval_loss=3.254008
-selector_grad_norm=0.053311
-b_grad_norm=0.162730
-peak_memory_mib=10726.1

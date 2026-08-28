@@ -2,52 +2,48 @@
 
 ## Current Workspace Status
 
-This repository is a research workspace derived from the upstream Dialogue-KT
-codebase. The active scope is narrower than the upstream README below:
+This repository is a compact research workspace derived from Dialogue-KT. The
+active scope is MathDial ATC with Qwen3-1.7B + LoRA and CEL modules:
 
-- task: MathDial ATC dialogue knowledge tracing with `True` / `False` token
-  probabilities;
-- model: Qwen3-1.7B with LoRA;
-- methods in scope: the recertified LLMKT baseline and CEL A/B;
-- certified baseline: `lmkt_qwen3_1.7b_recert_20260620`, Overall Acc/AUC
-  `69.22 / 74.95`;
-- audited A-module reference: Overall Acc/AUC `70.03 / 75.38` and Final
+- A module: token-level task-conditioned evidence selection;
+- B module: contextual transformation of the complementary non-evidence view;
+- future modules use the same A/B/C naming convention;
+- certified baseline: Overall Acc/AUC `69.22 / 74.95`, Final Acc/AUC
+  `61.17 / 75.32`;
+- A module historical reference: Overall Acc/AUC `70.03 / 75.38`, Final
   Acc/AUC `66.80 / 77.26`;
-- the historical A-module checkpoint name is
-  `cel_task_conditioned_lastlayer_v26_selftrained_biaswarmup_joint_tinylr_qwen3_1.7b`;
-  this identifier is retained for provenance only, while method prose calls it
-  the A module;
-- paper reference target: Overall AUC `76.71`, which has not yet been reached;
-- Stage 2 first-round Shuffle, token-wise MLP, and small Transformer candidates
-  completed training and audit, but used a legacy single-path environment
-  residual flow. They are historical pilots and do not validate the current
-  target method; no Stage 2 winner is declared.
-- the current target constructs `h_r = ((a + 1) / 2) ⊙ H`,
-  `h_n = ((1 - a) / 2) ⊙ H`, `h_nb = B(h_n)`, and
-  `h_m = h_r + β · h_nb`, then compares evidence-only and mixed predictions
-  through the same downstream Qwen network;
-- the dual-path forward, three-term supervised/consistency objective, tensor
-  contracts, and capacity-adequate B module are implemented;
-- the default protocol is unified end-to-end training: all enabled modules
-  (including an optional calibrator) share one optimizer and objective from
-  epoch 1, with fixed max epochs, validation-based best-checkpoint selection,
-  patience, and min_delta early stopping; staged warmups are historical or
-  explicitly declared exceptions;
-- the training CLI exposes `--max_epochs`, `--patience`, and `--min_delta`;
-  `--epochs` remains a compatibility alias, and historical runs are not
-  retroactively claimed to have used the new early-stopping protocol;
-- Round 1 of the three-round configuration study is running from raw Qwen
-  with `model/data seed=1221`; no extra seed is being run and Stage 3 is not
-  started.
+- paper target: Overall AUC `76.71`;
+- A and A+B will be retrained from raw Qwen after the refactor. Old staged
+  records and unrelated experiment results are intentionally not part of the
+  current workspace.
 
-The current authoritative Stage 1 result was successfully refreshed from the
-training server on `2026-08-12 23:17:24`. It contains metrics, per-turn
-predictions, KC outputs, and logs, but `saved_models/` contains no checkpoints.
-Use `/home/luo/miniconda3/envs/diagkt` for local source and smoke tests; formal
-checkpoint-based training and evaluation remain on the SSH server.
+The target A+B path is:
 
-For a new Stage 2 conversation, start with [.claude/STAGE2_HANDOFF.md](.claude/STAGE2_HANDOFF.md),
-[AGENTS.md](AGENTS.md), and [results/method_design/CEL_Stage2_实施流程与思路.md](results/method_design/CEL_Stage2_实施流程与思路.md).
+```text
+H -> A(a) -> h_r, h_n -> B(h_n) = h_nb -> h_m
+  -> shared P(h_r), shared P(h_m)
+```
+
+with `L_total = λ_r BCE(p_r, y) + λ_m BCE(p_m, y) +
+λ_cons JS([p_r, 1-p_r], [p_m, 1-p_m])`. All enabled modules are trained as one
+end-to-end model from epoch 1. Parameter-group learning rates are allowed, but
+not independent or alternating module training. Validation-best checkpoint,
+fixed early-stopping settings, final test, and audits are required.
+
+See [AGENTS.md](AGENTS.md), [.claude/STAGE2_HANDOFF.md](.claude/STAGE2_HANDOFF.md),
+and [results/method_design/CEL_Modular_Flow.md](results/method_design/CEL_Modular_Flow.md).
+
+Canonical rerun entry points (execute in the configured local or SSH
+environment) are:
+
+```bash
+bash scripts/cel/run_a_unified.sh
+bash scripts/cel/run_a_b_unified.sh
+```
+
+Both commands start from raw Qwen and use one end-to-end training loop. Set
+`DIALOGUE_KT_ROOT`, `BASE_MODEL`, `PYTHON_BIN`, or the documented learning-rate
+environment variables when running on the training server.
 The original upstream project instructions continue below for reference.
 
 ## Upstream Project README

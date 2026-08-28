@@ -1,4 +1,0 @@
-  File "scripts/expert_heads/diagnose_turn_attention.py", line 29
-    search_text = f"Turn {turn_num}"
-                                   ^
-SyntaxError: invalid syntax

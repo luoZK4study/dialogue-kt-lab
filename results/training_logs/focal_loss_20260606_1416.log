@@ -1,23 +1,0 @@
-Starting focal_loss on GPU 0 at Sat 06 Jun 2026 02:16:12 PM CST
-Arguments: Namespace(epochs=2, lr=0.0002, wd=0.01, gc=1.0, grad_accum_steps=32, r=16, lora_alpha=16, optim='adamw', pt_model_name=None, hyperparam_sweep=False, dataset='mathdial', split_by_subject=False, typical_cutoff=1, tag_src='atc', debug=False, model_type='lmkt', model_name='lmkt_focal_qwen3_1.7b', base_model='/home/user4/.cache/huggingface/hub/qwen/Qwen3-1.7B', inc_first_label=False, batch_size=1, crossval=False, testonval=False, agg='mean-ar', pack_kcs=True, quantize=False, prompt_inc_labels=False, emb_size=None, selfelicit=None, bayes_evidence=None, informativeness=None, kt_method='focal_loss', kt_prompt_method=None, kt_loss_method=None, aux_loss_weight=0.2, rank_loss_weight=0.1, rank_margin=0.05, state_top_k=8, consistency_weight=0.15, focal_gamma=2.0, dual_view_type='state_table', func=<function train at 0x7efbb8444b80>)
-Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   0%|          | 1/311 [00:00<00:51,  6.06it/s]Loading weights:   9%|▊         | 27/311 [00:00<00:02, 123.58it/s]Loading weights:  19%|█▉        | 60/311 [00:00<00:01, 204.94it/s]Loading weights:  30%|██▉       | 93/311 [00:00<00:00, 249.82it/s]Loading weights:  39%|███▉      | 122/311 [00:00<00:00, 257.18it/s]Loading weights:  49%|████▉     | 153/311 [00:00<00:00, 273.73it/s]Loading weights:  59%|█████▊    | 182/311 [00:00<00:00, 256.89it/s]Loading weights:  67%|██████▋   | 209/311 [00:00<00:00, 257.86it/s]Loading weights:  76%|███████▌  | 236/311 [00:01<00:00, 260.38it/s]Loading weights:  86%|████████▋ | 269/311 [00:01<00:00, 276.42it/s]Loading weights:  97%|█████████▋| 302/311 [00:01<00:00, 290.55it/s]Loading weights: 100%|██████████| 311/311 [00:01<00:00, 253.52it/s]
-Traceback (most recent call last):
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/runpy.py", line 196, in _run_module_as_main
-    return _run_code(code, main_globals, None,
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/runpy.py", line 86, in _run_code
-    exec(code, run_globals)
-  File "/home/user4/dialogue-kt/dialogue_kt/main.py", line 93, in <module>
-    main()
-  File "/home/user4/dialogue-kt/dialogue_kt/main.py", line 90, in main
-    args.func(args)
-  File "/home/user4/dialogue-kt/dialogue_kt/training.py", line 130, in train
-    return fn(args, get_default_fold(args))
-  File "/home/user4/dialogue-kt/dialogue_kt/training.py", line 398, in train_lmkt
-    train_dataset = KTDataset(train_df, tokenizer, args)
-  File "/home/user4/dialogue-kt/dialogue_kt/kt_data_loading.py", line 159, in __init__
-    user_content = kt_user_prompt_method(sample, dialogue, turn["turn"], None, args)
-  File "/home/user4/dialogue-kt/dialogue_kt/dialogue_methods.py", line 275, in kt_user_prompt_method
-    raise ValueError(f"Unsupported kt_method prompt: {method}")
-ValueError: Unsupported kt_method prompt: focal_loss
-Initializing trainable model with new LoRA adapters
-trainable params: 17,432,576 || all params: 1,738,007,552 || trainable%: 1.0030

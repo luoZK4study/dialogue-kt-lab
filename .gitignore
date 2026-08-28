@@ -1,4 +1,7 @@
 *.pyc
+__pycache__/
+data/
+literature/
 data/src/ATC
 data/src/mathdial
 data/src/*.csv

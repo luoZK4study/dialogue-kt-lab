@@ -1,4 +1,0 @@
-Stage 2 serial/expanded gradient equivalence passed on cpu: max_abs_diff=2.9802322e-08
-Stage 2 tensor contracts passed on cpu
-Stage 2 serial/expanded gradient equivalence passed on cuda: max_abs_diff=1.1920929e-07
-Stage 2 tensor contracts passed on cuda

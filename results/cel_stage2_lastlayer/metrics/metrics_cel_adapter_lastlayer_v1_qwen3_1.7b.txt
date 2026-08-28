@@ -1,8 +1,0 @@
-Loss: 0.6149
-Overall (1985 samples):
-GT - True: 940.0, False: 1045.0; Pred - True: 1001.0, False: 984.0
-Acc: 68.21, AUC: 75.04, Prec: 65.43, Rec: 69.68, F1: 67.49
-Final Turn (515 samples):
-GT - True: 376.0, False: 139.0; Pred - True: 289.0, False: 226.0
-Acc: 65.63, AUC: 72.66, Prec: 84.43, Rec: 64.89, F1: 73.38
-CEL Diagnostics: gate_mean: 0.0000, gate_abs_mean: 0.0000, gate_pos_frac: 0.0000, gate_neg_frac: 0.0000, gate_max: 0.0000, gate_min: 0.0000, injected_mean: 1.0821

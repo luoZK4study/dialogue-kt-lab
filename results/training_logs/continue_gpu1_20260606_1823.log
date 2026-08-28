@@ -1,125 +1,0 @@
-[18:23:11] ======== GPU 1: LOSS + COMBOS ========
-[18:23:11] === Dual View Consistency -> lmkt_dual_view_qwen3_1.7b ===
-Arguments: Namespace(epochs=2, lr=0.0002, wd=0.01, gc=1.0, grad_accum_steps=32, r=16, lora_alpha=16, optim='adamw', pt_model_name=None, hyperparam_sweep=False, dataset='mathdial', split_by_subject=False, typical_cutoff=1, tag_src='atc', debug=False, model_type='lmkt', model_name='lmkt_dual_view_qwen3_1.7b', base_model='/home/user4/.cache/huggingface/hub/qwen/Qwen3-1.7B', inc_first_label=False, batch_size=1, crossval=False, testonval=False, agg='mean-ar', pack_kcs=True, quantize=False, prompt_inc_labels=False, emb_size=None, selfelicit=None, bayes_evidence=None, informativeness=None, kt_method='dual_view_consistency', kt_prompt_method=None, kt_loss_method=None, aux_loss_weight=0.2, rank_loss_weight=0.1, rank_margin=0.05, state_top_k=8, consistency_weight=0.15, focal_gamma=2.0, dual_view_type='state_table', func=<function train at 0x7f6517760af0>)
-Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   1%|          | 2/311 [00:00<00:29, 10.46it/s]Loading weights:  11%|█▏        | 35/311 [00:00<00:01, 146.68it/s]Loading weights:  21%|██        | 65/311 [00:00<00:01, 204.44it/s]Loading weights:  32%|███▏      | 100/311 [00:00<00:00, 250.20it/s]Loading weights:  42%|████▏     | 131/311 [00:00<00:00, 265.79it/s]Loading weights:  52%|█████▏    | 163/311 [00:00<00:00, 282.61it/s]Loading weights:  62%|██████▏   | 193/311 [00:00<00:00, 273.07it/s]Loading weights:  71%|███████▏  | 222/311 [00:00<00:00, 269.78it/s]Loading weights:  83%|████████▎ | 257/311 [00:01<00:00, 292.64it/s]Loading weights:  94%|█████████▎| 291/311 [00:01<00:00, 302.21it/s]Loading weights: 100%|██████████| 311/311 [00:01<00:00, 263.74it/s]
-Initializing trainable model with new LoRA adapters
-trainable params: 17,432,576 || all params: 1,738,007,552 || trainable%: 1.0030
-15 / 1802 dialogues failed processing
-Number of data points: 8425
-3 / 451 dialogues failed processing
-Number of data points: 2202
-Epoch 1
-Training:   0%|          | 0/8425 [00:00<?, ?it/s]/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/torch/utils/checkpoint.py:295: FutureWarning: `torch.cpu.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cpu', args...)` instead.
-  with torch.enable_grad(), device_autocast_ctx, torch.cpu.amp.autocast(**ctx.cpu_autocast_kwargs):  # type: ignore[attr-defined]
-/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/torch/autograd/graph.py:769: UserWarning: Memory Efficient attention defaults to a non-deterministic algorithm. To explicitly enable determinism call torch.use_deterministic_algorithms(True, warn_only=False). (Triggered internally at ../aten/src/ATen/native/transformers/cuda/attention_backward.cu:619.)
-  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
-Training:   0%|          | 1/8425 [00:01<3:22:58,  1.45s/it]Training:   0%|          | 2/8425 [00:02<3:00:53,  1.29s/it]Training:   0%|          | 3/8425 [00:03<2:44:12,  1.17s/it]Training:   0%|          | 4/8425 [00:04<2:29:45,  1.07s/it]Training:   0%|          | 5/8425 [00:05<2:43:22,  1.16s/it]Training:   0%|          | 6/8425 [00:07<2:42:08,  1.16s/it]Training:   0%|          | 7/8425 [00:08<3:01:21,  1.29s/it]Training:   0%|          | 8/8425 [00:09<3:05:07,  1.32s/it]Training:   0%|          | 9/8425 [00:10<2:48:50,  1.20s/it]Training:   0%|          | 10/8425 [00:12<2:44:38,  1.17s/it]Training:   0%|          | 11/8425 [00:13<2:44:07,  1.17s/it]Training:   0%|          | 12/8425 [00:14<3:05:36,  1.32s/it]Training:   0%|          | 13/8425 [00:15<2:48:56,  1.21s/it]Training:   0%|          | 14/8425 [00:17<2:50:31,  1.22s/it]Training:   0%|          | 15/8425 [00:18<2:42:16,  1.16s/it]Training:   0%|          | 16/8425 [00:19<2:33:26,  1.09s/it]Training:   0%|          | 17/8425 [00:19<2:26:49,  1.05s/it]Training:   0%|          | 18/8425 [00:21<2:46:14,  1.19s/it]Training:   0%|          | 19/8425 [00:23<3:17:06,  1.41s/it]Training:   0%|          | 20/8425 [00:24<2:59:41,  1.28s/it]Training:   0%|          | 21/8425 [00:25<2:51:31,  1.22s/it]Training:   0%|          | 22/8425 [00:27<3:06:18,  1.33s/it]Training:   0%|          | 23/8425 [00:28<3:08:46,  1.35s/it]Training:   0%|          | 24/8425 [00:29<3:09:44,  1.36s/it]Training:   0%|          | 25/8425 [00:30<2:54:50,  1.25s/it]Training:   0%|          | 26/8425 [00:31<2:45:27,  1.18s/it]Training:   0%|          | 27/8425 [00:32<2:43:12,  1.17s/it]Training:   0%|          | 28/8425 [00:34<2:44:15,  1.17s/it]Training:   0%|          | 29/8425 [00:35<2:34:37,  1.10s/it]Training:   0%|          | 30/8425 [00:36<2:27:35,  1.05s/it]Training:   0%|          | 31/8425 [00:38<3:08:15,  1.35s/it]Training:   0%|          | 32/8425 [00:39<2:56:46,  1.26s/it]Training:   0%|          | 32/8425 [00:39<2:52:06,  1.23s/it]
-Traceback (most recent call last):
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/runpy.py", line 196, in _run_module_as_main
-    return _run_code(code, main_globals, None,
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/runpy.py", line 86, in _run_code
-    exec(code, run_globals)
-  File "/home/user4/dialogue-kt/dialogue_kt/main.py", line 93, in <module>
-    main()
-  File "/home/user4/dialogue-kt/dialogue_kt/main.py", line 90, in main
-    args.func(args)
-  File "/home/user4/dialogue-kt/dialogue_kt/training.py", line 130, in train
-    return fn(args, get_default_fold(args))
-  File "/home/user4/dialogue-kt/dialogue_kt/training.py", line 421, in train_lmkt
-    loss, _, _ = get_loss(model, batch, true_token, false_token, args)
-  File "/home/user4/dialogue-kt/dialogue_kt/training.py", line 298, in get_lmkt_loss_method
-    return get_lmkt_loss_dual_view_consistency(model, batch, true_token, false_token, args)
-  File "/home/user4/dialogue-kt/dialogue_kt/training.py", line 280, in get_lmkt_loss_dual_view_consistency
-    kc_probs2, _ = get_lmkt_probs_packed(model, batch, true_token, false_token, args, suffix="_view2")
-  File "/home/user4/dialogue-kt/dialogue_kt/training.py", line 205, in get_lmkt_probs_packed
-    model_output = model(input_ids=batch[f"input_ids{suffix}"], attention_mask=attention_mask, position_ids=batch[f"position_ids{suffix}"])
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
-    return forward_call(*args, **kwargs)
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/peft/peft_model.py", line 1993, in forward
-    return self.base_model(
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
-    return forward_call(*args, **kwargs)
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/peft/tuners/tuners_utils.py", line 330, in forward
-    return self.model.forward(*args, **kwargs)
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/transformers/utils/generic.py", line 900, in wrapper
-    output = func(self, *args, **kwargs)
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 492, in forward
-    outputs: BaseModelOutputWithPast = self.model(
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
-    return forward_call(*args, **kwargs)
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/transformers/utils/generic.py", line 976, in wrapper
-    output = func(self, *args, **kwargs)
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/transformers/utils/output_capturing.py", line 248, in wrapper
-    outputs = func(self, *args, **kwargs)
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 424, in forward
-    hidden_states = decoder_layer(
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/transformers/modeling_layers.py", line 92, in __call__
-    return self._gradient_checkpointing_func(partial(super().__call__, **kwargs), *args)
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/torch/_compile.py", line 31, in inner
-    return disable_fn(*args, **kwargs)
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/torch/_dynamo/eval_frame.py", line 600, in _fn
-    return fn(*args, **kwargs)
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/torch/utils/checkpoint.py", line 481, in checkpoint
-    return CheckpointFunction.apply(function, preserve, *args)
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/torch/autograd/function.py", line 574, in apply
-    return super().apply(*args, **kwargs)  # type: ignore[misc]
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/torch/utils/checkpoint.py", line 255, in forward
-    outputs = run_function(*args)
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
-    return forward_call(*args, **kwargs)
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 318, in forward
-    hidden_states, _ = self.self_attn(
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
-    return forward_call(*args, **kwargs)
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 263, in forward
-    query_states = self.q_norm(self.q_proj(hidden_states).view(hidden_shape)).transpose(1, 2)
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
-    return forward_call(*args, **kwargs)
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/peft/tuners/lora/layer.py", line 955, in forward
-    result = self.base_layer(x, *args, **kwargs)
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
-    return forward_call(*args, **kwargs)
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/torch/nn/modules/linear.py", line 117, in forward
-    return F.linear(input, self.weight, self.bias)
-RuntimeError: CUDA error: CUBLAS_STATUS_EXECUTION_FAILED when calling `cublasGemmEx( handle, opa, opb, m, n, k, &falpha, a, CUDA_R_16BF, lda, b, CUDA_R_16BF, ldb, &fbeta, c, CUDA_R_16BF, ldc, compute_type, CUBLAS_GEMM_DEFAULT_TENSOR_OP)`
-../aten/src/ATen/native/cuda/Loss.cu:94: operator(): block: [0,0,0], thread: [0,0,0] Assertion `input_val >= zero && input_val <= one` failed.
-[18:24:12] >>> Dual View Consistency AUC = FAIL
-[18:24:12] === SolutionContrast+RankAUC -> lmkt_solcon_rank_qwen3_1.7b ===
-Arguments: Namespace(epochs=2, lr=0.0002, wd=0.01, gc=1.0, grad_accum_steps=32, r=16, lora_alpha=16, optim='adamw', pt_model_name=None, hyperparam_sweep=False, dataset='mathdial', split_by_subject=False, typical_cutoff=1, tag_src='atc', debug=False, model_type='lmkt', model_name='lmkt_solcon_rank_qwen3_1.7b', base_model='/home/user4/.cache/huggingface/hub/qwen/Qwen3-1.7B', inc_first_label=False, batch_size=1, crossval=False, testonval=False, agg='mean-ar', pack_kcs=True, quantize=False, prompt_inc_labels=False, emb_size=None, selfelicit=None, bayes_evidence=None, informativeness=None, kt_method='base', kt_prompt_method='solution_contrast', kt_loss_method='rank_auc', aux_loss_weight=0.2, rank_loss_weight=0.1, rank_margin=0.05, state_top_k=8, consistency_weight=0.15, focal_gamma=2.0, dual_view_type='state_table', func=<function train at 0x7f891cbe0af0>)
-Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   0%|          | 1/311 [00:00<00:57,  5.41it/s]Loading weights:  12%|█▏        | 37/311 [00:00<00:01, 156.95it/s]Loading weights:  23%|██▎       | 71/311 [00:00<00:01, 222.52it/s]Loading weights:  34%|███▍      | 105/311 [00:00<00:00, 256.58it/s]Loading weights:  43%|████▎     | 134/311 [00:00<00:00, 265.63it/s]Loading weights:  52%|█████▏    | 163/311 [00:00<00:00, 272.87it/s]Loading weights:  62%|██████▏   | 192/311 [00:00<00:00, 265.54it/s]Loading weights:  71%|███████   | 220/311 [00:00<00:00, 263.14it/s]Loading weights:  82%|████████▏ | 254/311 [00:01<00:00, 285.54it/s]Loading weights:  93%|█████████▎| 290/311 [00:01<00:00, 305.29it/s]Loading weights: 100%|██████████| 311/311 [00:01<00:00, 259.82it/s]
-Traceback (most recent call last):
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/runpy.py", line 196, in _run_module_as_main
-    return _run_code(code, main_globals, None,
-  File "/opt/anaconda3/envs/luo_2/lib/python3.10/runpy.py", line 86, in _run_code
-    exec(code, run_globals)
-  File "/home/user4/dialogue-kt/dialogue_kt/main.py", line 93, in <module>
-    main()
-  File "/home/user4/dialogue-kt/dialogue_kt/main.py", line 90, in main
-    args.func(args)
-  File "/home/user4/dialogue-kt/dialogue_kt/training.py", line 130, in train
-    return fn(args, get_default_fold(args))
-  File "/home/user4/dialogue-kt/dialogue_kt/training.py", line 398, in train_lmkt
-    train_dataset = KTDataset(train_df, tokenizer, args)
-  File "/home/user4/dialogue-kt/dialogue_kt/kt_data_loading.py", line 159, in __init__
-    user_content = kt_user_prompt_method(sample, dialogue, turn["turn"], None, args)
-  File "/home/user4/dialogue-kt/dialogue_kt/dialogue_methods.py", line 275, in kt_user_prompt_method
-    raise ValueError(f"Unsupported kt_method prompt: {method}")
-ValueError: Unsupported kt_method prompt: base
-Initializing trainable model with new LoRA adapters
-trainable params: 17,432,576 || all params: 1,738,007,552 || trainable%: 1.0030
-[18:24:25] >>> SolutionContrast+RankAUC AUC = FAIL
-[18:24:25] ======== GPU 1 DONE ========

@@ -8,7 +8,7 @@
 
 - 模型名：`lmkt_qwen3_1.7b_recert_20260620`
 - 结果目录：`results/baseline/`
-- 训练脚本：`scripts/cel_stage1_last_layer/run_baseline.sh`
+- 训练脚本：baseline 认证使用的历史脚本已清理；后续 A/A+B 重训入口见 `scripts/cel/`。
 
 ## 状态
 

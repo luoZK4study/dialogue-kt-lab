@@ -1,12 +1,12 @@
-# CEL Stage 2 B 模块统一实现方案
+# CEL B 模块统一实现方案
 
-## 1. 阶段目标
+## 1. B 模块目标
 
-Stage 2 的目标是：
+B 模块的目标是：
 
 > 在 A 已经产生 token-level 选择强度 `a` 的基础上，显式构造证据表征与非证据表征，用 B 变换非证据表征，并要求混合表征的预测与证据表征的预测保持一致。
 
-Stage 2 当前只讨论 A+B，不启动 Stage 3。
+本文当前只讨论 A+B；未来模块按 C、D 等顺序扩展。
 
 ## 2. 统一术语
 
@@ -93,7 +93,7 @@ p_m = softmax_true_false(z_m)
 H + γ(a ⊙ H + β * environment)
 ```
 
-只属于历史 Stage 2 首轮实现。它保留完整 `H`，没有 evidence-only prediction，也没有 `p_r/p_m` 一致性约束，因此不再作为目标方法定义。
+只属于历史 A+B 首轮实现。它保留完整 `H`，没有 evidence-only prediction，也没有 `p_r/p_m` 一致性约束，因此不再作为目标方法定义。
 
 ## 5. 整体训练目标
 
@@ -166,7 +166,7 @@ raw Qwen + LoRA + A + B + optional calibrator (+ C/D/...)
 
 训练开始前固定 `max_epochs`、validation 指标、`patience` 和 `min_delta`。不同模块可以使用 parameter-group learning rate，但这仍属于同一优化任务，不得默认冻结、交替或拆分为独立训练。
 
-当前实现状态：训练 CLI 已实现 `--max_epochs`、`--patience`、`--min_delta` 与 validation-best checkpoint 早停；`--epochs` 仅为兼容别名。本节描述的统一协议不对历史五阶段运行作回溯性认证。
+当前实现状态：训练 CLI 已实现 `--max_epochs`、`--patience`、`--min_delta` 与 validation-best checkpoint 早停；`--epochs` 仅为兼容别名。本节描述的统一协议不对旧分阶段运行作回溯性认证。
 
 ### 6.1 Calibrator 的必要性与边界
 
@@ -191,7 +191,7 @@ Qwen3-1.7B raw base
 -> provenance / parameter / tensor-contract audit
 ```
 
-禁止加载其他 A+B candidate、baseline 或历史 anchor 的参数。Stage 2 可以读取同一 candidate 刚完成的 A 阶段 checkpoint，因为它属于当前 candidate 自身的顺序训练链。
+禁止加载其他 A+B candidate、baseline 或历史 anchor 的参数。旧分阶段协议可以读取同一 candidate 刚完成的 A 模块 checkpoint，但这不属于当前统一训练流程。
 
 这套 `A bootstrap -> calibrator warmup -> A strict joint -> B warmup -> joint` 是现有代码和已运行工件的历史阶段链，不是新默认训练规范。它可以用于解释旧日志和复现实验，但不能作为统一端到端结果的证据。
 
@@ -227,7 +227,7 @@ Qwen3-1.7B raw base
 
 ### 8.1 后续控制实验（当前不执行）
 
-以下 controls 属于更完整的机制研究设计，但用户已明确将它们排除在当前三轮实现与验证范围之外。当前不得启动这些实验，也不得把它们或额外 seed 作为本次 Stage 2 技术关闭的前置条件。
+以下 controls 属于后续机制研究设计。在 A 和 A+B 按统一协议完成重训、验证和审计前，不启动这些实验，也不把它们当作当前主线的必要前置条件。
 
 - **A-only**：只使用 `h_r` 路径，确定证据路径性能。
 - **β=0**：保留共同训练轨迹，关闭 B 对 `h_m` 的直接贡献。
@@ -245,24 +245,11 @@ Qwen3-1.7B raw base
 - A、B、LoRA、calibrator 的梯度和参数变化。
 - 注入位置对 prediction token 的因果影响。
 
-## 9. 首轮历史结果的重新定位
+## 9. 历史结果的解释边界
 
-已完成的三个 Stage 2 首轮 candidate 均通过来源和参数审计：
+旧 A+B candidate 使用单路径 residual 流程，缺少 `h_r/h_n` 互补分解、独立的 `p_r/p_m` 和 `L_cons`。相关 metrics、qual、日志和 audit 已从工作树清理，仅可从 Git 历史追溯，不能作为当前双路径方法的验证或正式结果。
 
-| 历史方向 | Overall Acc/AUC | Final Acc/AUC | 相对 A 模块参考的 Overall AUC |
-|---|---:|---:|---:|
-| Shuffle | `68.72 / 74.14` | `62.52 / 72.79` | `-1.24` |
-| Token-wise MLP | `68.46 / 75.47` | `63.88 / 76.29` | `+0.09` |
-| Small Transformer | `68.06 / 75.25` | `67.18 / 74.73` | `-0.13` |
-
-这些结果来自旧的单路径 residual 流程，只能作为历史 pilot 与工程诊断：
-
-- 它们没有构造 `h_r/h_n` 的互补分解。
-- 它们没有分别计算 `p_r` 与 `p_m`。
-- 它们没有使用 `L_cons`。
-- 它们不能验证证据充分性或环境不变性。
-
-因此当前没有 Stage 2 winner。下一轮正式工作应先实现本文定义的双路径流程，再设计充分容量的 B 主候选。
+当前没有 A+B 正式结果。下一步应按第 6 节的统一端到端协议从 raw Qwen 重训 A+B，再以 validation-best 整体 checkpoint 完成 test 和审计。
 
 ## 10. 当前实现状态与代码边界
 
@@ -278,13 +265,15 @@ Qwen3-1.7B raw base
   - 增加 B warmup、分组学习率与双路径 diagnostics。
 - `dialogue_kt/main.py`
   - 增加双路径训练、一致性权重和 B 容量参数。
+- `scripts/cel/`
+  - A/A+B 统一训练入口。
 - `scripts/cel_stage2_environment/`
-  - 增加双路径 tensor contracts、audit 与结果汇总。
+  - 双路径 tensor contracts、evaluation、audit 和 SSH 同步工具。
 
 长序列 joint 训练按 `rows * sequence_length^2` 评估注意力风险：低于 `8000000` 时将 evidence/mixed 沿 batch 维展开；达到或超过该阈值时串行执行两条路径，并对共享损失做精确梯度拆分。该策略不改变 `L_total`；自动 tensor contract 在 CPU/CUDA 上测得的最大参数梯度差分别为 `2.98e-08` 和 `1.19e-07`。完整训练集最坏 batch 的真实 Qwen joint 与 B-only 预检均已通过。
 
-当前允许的正式工作是固定 seed `1221` 的三轮 validation-driven 配置实验、冻结后的统一 final test、来源/参数/互补/tensor-contract 审计和最终报告；不启动 controls、额外 seed 或 Stage 3。
+当前允许的正式工作是从 raw Qwen 独立重训 A 和 A+B，完成 validation-best 恢复、final test、来源/参数/互补/tensor-contract 审计和诊断报告。未完成上述闭环前不启动 C 模块、额外正则或 controls。
 
-## 11. 方法设计原则
+## 11. 全局模块设计规范（适用于 A、B、C、D……）
 
-方法设计应首先服从研究假设和目标因果机制，而不应以“最小改动、最少参数或单次训练成本最低”作为正式方案的首要目标。对于每一个阶段，应从目标机制反向设计完整且功能闭合的模块，明确其输入输出表征、模块之间的信息流、下游使用方式、训练目标、优化日程以及可验证的诊断指标。模块容量应与所要建模的变换复杂度相匹配，不能用过小或过于简化的模块替代核心方法，再据此判断研究方向是否有效。轻量模块可以用于接口检查、sanity check 或消融实验，但不应作为核心方法的主要证据。不应通过削弱核心模块的表达能力来节省正式训练。参数效率应在机制得到充分验证之后再进行优化。
+本规范适用于 A、B 以及未来所有新增模块，而不只是 B。方法设计必须首先服从研究假设和目标因果机制，而不是最小改动、最少参数或单次训练成本。每个模块都要明确输入/输出表征、模块间信息流、下游使用、训练目标、优化日程和诊断指标；容量必须与目标变换复杂度匹配。轻量模块只能用于接口检查、sanity check 或消融，不能作为核心方法证据，也不能用来替核心模块节省正式训练成本。参数效率应在机制得到充分验证之后再优化。

@@ -37,7 +37,7 @@ def main():
     parser_train.add_argument("--cel_selector_lr", type=float,
                               help="Optional dedicated learning rate for A during joint CEL training")
     parser_train.add_argument("--cel_environment_lr", type=float,
-                              help="Optional dedicated learning rate for B during dual-path Stage 2 training")
+                              help="Optional dedicated learning rate for B during joint A+B dual-path training")
     parser_train.add_argument("--cel_calibrator_warmup_epochs", type=int, default=0,
                               help="Optional number of initial epochs that train only the CEL output calibrator before restoring the normal CEL train mode")
     parser_train.add_argument("--cel_calibrator_warmup_lr", type=float,
@@ -56,17 +56,17 @@ def main():
     parser_train.add_argument("--cel_calibrator_init_model_name", type=str,
                               help="Optional CEL model checkpoint used to warm-start calibrator weights only")
     parser_train.add_argument("--cel_environment_init_model_name", type=str,
-                              help="Optional same-candidate Stage 2 checkpoint used to initialize the environment generator")
+                              help="Optional same-candidate B checkpoint used to initialize the environment generator")
     parser_train.add_argument("--cel_require_exact_selector_init", type=bool_type, default=False,
                               help="Fail instead of falling back to a fresh or partial selector when an init checkpoint is requested")
     parser_train.add_argument("--cel_require_complete_checkpoint", type=bool_type, default=False,
                               help="Require selector and calibrator artifacts when testing the trained CEL checkpoint")
     parser_train.add_argument("--cel_require_exact_environment_init", type=bool_type, default=False,
-                              help="Require the Stage 2 environment checkpoint to exactly match the requested generator")
+                              help="Require the B checkpoint to exactly match the requested generator")
     parser_train.add_argument("--skip_test_after_train", type=bool_type, default=False,
                               help="Stop after training and validation checkpoint selection for an intermediate experiment stage")
     parser_train.add_argument("--cel_train_environment_only", type=bool_type, default=False,
-                              help="Freeze A, LoRA, and calibrator while warming up Stage 2 B")
+                              help="Historical special protocol: freeze A, LoRA, and calibrator while warming up B")
     parser_train.add_argument("--hyperparam_sweep", action="store_true", help="Run a hyperparameter sweep experiment")
 
     parser_test = subparsers.add_parser("test", help="Test KT model")
@@ -101,7 +101,7 @@ def main():
         subparser.add_argument("--prompt_inc_labels", type=bool_type, default=False, help="For LLMKT, include explicit correctness and KC labels in prompt")
         subparser.add_argument("--emb_size", type=int, help="Latent state dimension for DKT family models")
         subparser.add_argument("--cel_mode", type=str, choices=["mlp", "adapter", "task_conditioned"], default=None,
-                               help="CEL stage1 selector mode: mlp, adapter, or task_conditioned")
+                               help="CEL A selector mode: mlp, adapter, or task_conditioned")
         subparser.add_argument("--cel_layer_idx", type=int, default=-1, help="Layer index used to extract H_k for CEL injection when `--cel_hook_site last_block`; -1 means the last transformer layer")
         subparser.add_argument("--cel_hook_site", type=str, choices=["last_block", "pre_lm_head"], default="last_block",
                                help="Where to hook CEL injection: last transformer block output or final hidden state right before lm_head")
@@ -129,18 +129,18 @@ def main():
         subparser.add_argument("--cel_train_selector_and_calibrator_only", type=bool_type, default=False,
                                help="Freeze backbone/LoRA parameters and jointly train only the CEL selector plus optional output calibrator")
         subparser.add_argument("--cel_stage2_enabled", type=bool_type, default=False,
-                               help="Enable the Stage 2 non-rationale environment branch")
+                               help="Enable the B/non-evidence branch for joint A+B dual-path training")
         subparser.add_argument("--cel_stage2_fresh_init", type=bool_type, default=False,
-                               help="Require a self-contained Stage 2 candidate chain that starts from the raw base model")
+                               help="Require an A+B candidate to start from the raw base model")
         subparser.add_argument("--cel_stage2_candidate_id", type=str, default=None,
-                               help="Stable identifier shared by every phase of one independently initialized Stage 2 candidate")
+                               help="Stable identifier for one independently initialized A+B candidate")
         subparser.add_argument("--cel_stage2_phase", type=str,
                                choices=["a_bootstrap", "calibrator_warmup", "a_joint", "b_warmup", "joint"], default=None,
-                               help="Current phase in the self-contained Stage 2 candidate chain")
+                               help="Historical compatibility phase; leave unset for unified A+B training")
         subparser.add_argument("--cel_stage2_parent_model_name", type=str, default=None,
-                               help="Exact same-candidate parent checkpoint expected for warmup or joint phases")
+                               help="Historical same-candidate parent checkpoint for a staged compatibility phase")
         subparser.add_argument("--cel_env_mode", type=str, choices=["shuffle", "mlp", "transformer", "contextual_transformer"], default=None,
-                               help="Stage 2 environment generator direction")
+                               help="B module direction")
         subparser.add_argument("--cel_env_beta", type=float, default=0.1,
                                help="Environment residual scale before the shared CEL gamma")
         subparser.add_argument("--cel_env_split_mode", type=str, choices=["complementary", "topk_abs", "sigmoid"], default="complementary",
@@ -150,15 +150,15 @@ def main():
         subparser.add_argument("--cel_env_sigmoid_temperature", type=float, default=5.0,
                                help="Temperature used by the optional sigmoid split ablation")
         subparser.add_argument("--cel_env_hidden_dim", type=int, default=1024,
-                               help="Internal width of learned Stage 2 environment generators")
+                               help="Internal width of the learned B module")
         subparser.add_argument("--cel_env_num_layers", type=int, default=4,
-                               help="Number of Transformer encoder layers in the Stage 2 Transformer direction")
+                               help="Number of Transformer encoder layers in the B Transformer")
         subparser.add_argument("--cel_env_num_heads", type=int, default=8,
-                               help="Number of attention heads in the Stage 2 Transformer direction")
+                               help="Number of attention heads in the B Transformer")
         subparser.add_argument("--cel_env_ffn_dim", type=int, default=4096,
                                help="Optional Transformer environment FFN width")
         subparser.add_argument("--cel_env_drop", type=float, default=0.1,
-                               help="Dropout inside learned Stage 2 environment generators")
+                               help="Dropout inside the learned B module")
         subparser.add_argument("--cel_env_output_postprocess", type=str, choices=["none", "centered_rms"], default="centered_rms",
                                help="Optional post-processing that centers learned environment tokens and calibrates their RMS")
         subparser.add_argument("--cel_env_output_ratio", type=float, default=1.0,
@@ -168,9 +168,9 @@ def main():
         subparser.add_argument("--cel_env_shuffle_seed", type=int, default=221,
                                help="Seed for deterministic within-context non-rationale shuffling")
         subparser.add_argument("--cel_stage2_lambda_r", type=float, default=1.0,
-                               help="Evidence-path BCE weight in the dual-path Stage 2 objective")
+                               help="Evidence-path BCE weight in the joint A+B objective")
         subparser.add_argument("--cel_stage2_lambda_m", type=float, default=1.0,
-                               help="Mixed-path BCE weight in the dual-path Stage 2 objective")
+                               help="Mixed-path BCE weight in the joint A+B objective")
         subparser.add_argument("--cel_stage2_lambda_cons", type=float, default=0.1,
                                help="Bernoulli Jensen-Shannon consistency weight")
         subparser.add_argument("--cel_stage2_beta_start_ratio", type=float, default=0.2,

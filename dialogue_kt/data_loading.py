@@ -186,7 +186,9 @@ def get_results_dir(args, artifact_type: str = None):
             return str(base / artifact_type)
         return str(base)
     if getattr(args, "cel_mode", None):
-        base = Path("results/cel_stage1")
+        # Keep the implicit CEL output location aligned with the canonical
+        # module names when callers do not provide --result_subdir.
+        base = Path("results/a_b" if getattr(args, "cel_stage2_enabled", False) else "results/a")
         if artifact_type:
             return str(base / artifact_type)
         return str(base)

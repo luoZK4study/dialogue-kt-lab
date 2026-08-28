@@ -1,7 +1,0 @@
-Loss: 0.7086
-Overall (29 samples):
-GT - True: 15.0, False: 14.0; Pred - True: 11.0, False: 18.0
-Acc: 44.83, AUC: 46.19, Prec: 45.45, Rec: 33.33, F1: 38.46
-Final Turn (9 samples):
-GT - True: 7.0, False: 2.0; Pred - True: 3.0, False: 6.0
-Acc: 33.33, AUC: 50.00, Prec: 66.67, Rec: 28.57, F1: 40.00

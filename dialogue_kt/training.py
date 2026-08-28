@@ -616,9 +616,9 @@ def _init_cel_selector(model, args):
             selector = TaskConditionedSelector(hidden_dim=hidden_dim, gate_hidden_dim=selector_dim, dropout=getattr(args, "cel_drop", 0.1))
     else:
         raise ValueError(f"Unsupported cel_mode: {mode}")
-    # Keep the Stage 2 A module in FP32. The Qwen backbone may run in bf16, but
-    # the strict joint phase uses a tiny learning rate whose updates must remain
-    # representable in the selector checkpoint. Stage 1 keeps its legacy dtype.
+    # Keep A/B modules in FP32. The Qwen backbone may run in bf16, but the
+    # selector and B checkpoints remain fully representable. A-only keeps its
+    # legacy selector dtype for compatibility.
     selector_dtype = torch.float32 if _stage2_enabled(args) else model.dtype
     return selector.to(device=device, dtype=selector_dtype)
 
@@ -705,7 +705,7 @@ def _stage2_manifest_from_args(args) -> dict:
 def _load_stage2_manifest(model_name: str) -> dict:
     manifest_path = os.path.join(get_checkpoint_path(model_name), CEL_STAGE2_MANIFEST_FILENAME)
     if not os.path.isfile(manifest_path):
-        raise FileNotFoundError(f"Stage 2 manifest not found at {manifest_path}")
+        raise FileNotFoundError(f"A+B manifest not found at {manifest_path}")
     with open(manifest_path, encoding="utf-8") as manifest_file:
         return json.load(manifest_file)
 
@@ -924,7 +924,7 @@ def _maybe_load_cel_environment_init(model, args):
         return
     env_path = os.path.join(get_checkpoint_path(init_model_name), CEL_ENVIRONMENT_FILENAME)
     if not os.path.isfile(env_path):
-        raise FileNotFoundError(f"Stage 2 environment warm-start file not found at {env_path}")
+        raise FileNotFoundError(f"B module warm-start file not found at {env_path}")
     source_state = torch.load(env_path, map_location="cpu", weights_only=True)
     try:
         environment.load_state_dict(source_state, strict=True)
@@ -932,7 +932,7 @@ def _maybe_load_cel_environment_init(model, args):
         if getattr(args, "cel_require_exact_environment_init", False):
             raise
         environment.load_state_dict(source_state, strict=False)
-    print(f"Stage 2 environment warm-start loaded from {env_path}")
+    print(f"B module warm-start loaded from {env_path}")
 
 
 def _maybe_load_cel_selector_init(model, args):
@@ -2076,7 +2076,7 @@ def train_lmkt(args, fold):
         print(f"CEL output calibration: {getattr(args, 'cel_output_calibration', 'none')}")
         if _stage2_enabled(args):
             print(
-                "CEL Stage 2 enabled: "
+                "CEL A+B dual path enabled: "
                 f"candidate={getattr(args, 'cel_stage2_candidate_id', None)}, "
                 f"phase={getattr(args, 'cel_stage2_phase', None)}, "
                 f"env_mode={getattr(args, 'cel_env_mode', None)}, "
@@ -2215,13 +2215,13 @@ def train_lmkt(args, fold):
             if hasattr(model, "_cel_environment") and model._cel_environment is not None:
                 env_path = os.path.join(get_checkpoint_path(model_name), CEL_ENVIRONMENT_FILENAME)
                 torch.save(model._cel_environment.state_dict(), env_path)
-                print(f"Stage 2 environment saved to {env_path}")
+                print(f"B module saved to {env_path}")
             if _stage2_enabled(args):
                 manifest_path = os.path.join(get_checkpoint_path(model_name), CEL_STAGE2_MANIFEST_FILENAME)
                 with open(manifest_path, "w", encoding="utf-8") as manifest_file:
                     json.dump(_stage2_manifest_from_args(args), manifest_file, indent=2, sort_keys=True)
                     manifest_file.write("\n")
-                print(f"Stage 2 manifest saved to {manifest_path}")
+                print(f"A+B manifest saved to {manifest_path}")
         elif getattr(args, "patience", 0):
             print(
                 f"No meaningful validation improvement for {stale_epochs} epoch(s) "
@@ -2270,10 +2270,10 @@ def test_lmkt(args, fold):
         if model._cel_environment is not None:
             env_path = os.path.join(get_checkpoint_path(model_name), CEL_ENVIRONMENT_FILENAME)
             if not os.path.isfile(env_path):
-                raise FileNotFoundError(f"Stage 2 environment checkpoint not found at {env_path}")
+                raise FileNotFoundError(f"B module checkpoint not found at {env_path}")
             model._cel_environment.load_state_dict(torch.load(env_path, map_location=device, weights_only=True))
             _load_stage2_manifest(model_name)
-            print(f"Stage 2 environment loaded from {env_path}")
+            print(f"B module loaded from {env_path}")
         model._cel_metrics = {}
         model._cel_last_outputs = {}
 

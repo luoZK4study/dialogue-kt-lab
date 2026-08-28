@@ -1,8 +1,0 @@
-Loss: 0.6930
-Overall (29 samples):
-GT - True: 15.0, False: 14.0; Pred - True: 0.0, False: 29.0
-Acc: 48.28, AUC: 64.76, Prec: 0.00, Rec: 0.00, F1: 0.00
-Final Turn (9 samples):
-GT - True: 7.0, False: 2.0; Pred - True: 0.0, False: 9.0
-Acc: 22.22, AUC: 78.57, Prec: 0.00, Rec: 0.00, F1: 0.00
-CEL Diagnostics: gate_mean: -0.1598, gate_abs_mean: 0.1598, gate_pos_frac: 0.0000, gate_neg_frac: 1.0000, gate_max: 0.0000, gate_min: -0.2381, injected_mean: 1.9884, env_split_frac: 0.2000, env_non_rationale_frac: 0.8000, env_selected_score: 0.1918, env_non_selected_score: 0.1517, rationale_l2_mean: 484.3371, env_l2_mean: 2.7472, env_scaled_l2_mean: 0.2747, env_input_l2_mean: 3017.8040, env_to_rationale_l2_ratio: 0.0057, env_rationale_cosine: -0.0008, env_input_cosine: 0.0012, cal_bias: 0.3280, post_prob_invalid_frac: 0.0000, post_prob_label_invalid_frac: 0.0000, post_prob_label_out_of_range_frac: 0.0000, post_prob_label_raw_max: 0.5172, post_prob_label_raw_min: 0.5172, post_prob_label_safe_max: 0.5172, post_prob_label_safe_min: 0.5172, post_prob_label_sanitized_frac: 0.0000, post_prob_out_of_range_frac: 0.0000, post_prob_raw_max: 0.4010, post_prob_raw_min: 0.4010, post_prob_safe_max: 0.4010, post_prob_safe_min: 0.4010, post_prob_sanitized_frac: 0.0000, pre_prob_invalid_frac: 0.0000, pre_prob_out_of_range_frac: 0.0000, pre_prob_raw_max: 0.3264, pre_prob_raw_min: 0.3264, pre_prob_safe_max: 0.3264, pre_prob_safe_min: 0.3264, pre_prob_sanitized_frac: 0.0000

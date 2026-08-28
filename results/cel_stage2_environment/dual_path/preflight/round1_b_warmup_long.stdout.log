@@ -1,20 +1,0 @@
-Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   0%|          | 1/311 [00:00<00:54,  5.68it/s]Loading weights:  11%|█         | 33/311 [00:00<00:01, 145.34it/s]Loading weights:  19%|█▉        | 60/311 [00:00<00:01, 189.33it/s]Loading weights:  26%|██▋       | 82/311 [00:00<00:01, 197.90it/s]Loading weights:  36%|███▋      | 113/311 [00:00<00:00, 234.82it/s]Loading weights:  44%|████▍     | 138/311 [00:00<00:00, 215.90it/s]Loading weights:  52%|█████▏    | 161/311 [00:00<00:00, 215.81it/s]Loading weights:  59%|█████▉    | 184/311 [00:00<00:00, 213.57it/s]Loading weights:  66%|██████▌   | 206/311 [00:01<00:00, 204.02it/s]Loading weights:  73%|███████▎  | 227/311 [00:01<00:00, 198.85it/s]Loading weights:  80%|███████▉  | 248/311 [00:01<00:00, 192.88it/s]Loading weights:  88%|████████▊ | 275/311 [00:01<00:00, 214.12it/s]Loading weights:  96%|█████████▌| 299/311 [00:01<00:00, 217.46it/s]Loading weights: 100%|██████████| 311/311 [00:01<00:00, 203.64it/s]
-/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/torch/utils/checkpoint.py:1399: FutureWarning: `torch.cpu.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cpu', args...)` instead.
-  with device_autocast_ctx, torch.cpu.amp.autocast(**cpu_autocast_kwargs), recompute_context:  # type: ignore[attr-defined]
-/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/torch/autograd/graph.py:769: UserWarning: Memory Efficient attention defaults to a non-deterministic algorithm. To explicitly enable determinism call torch.use_deterministic_algorithms(True, warn_only=False). (Triggered internally at ../aten/src/ATen/native/transformers/cuda/attention_backward.cu:619.)
-  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
-Initializing trainable model with new LoRA adapters
-CEL B-only training enabled: 54,585,344 / 1,799,937,538 parameters trainable
-15 / 1802 dialogues failed processing
-Number of data points: 8425
-Real-Qwen dual-path preflight passed
-selected_sample_index=2005
-selected_max_tokens=2255
-train_mode=environment_only
-input_rows=2
-sequence_length=2255
-train_loss=1.627004
-eval_loss=1.627004
-selector_grad_norm=0.000000
-b_grad_norm=0.152026
-peak_memory_mib=21421.5
