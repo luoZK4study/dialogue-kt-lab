@@ -1,0 +1,1288 @@
+[2026-06-14 16:26:47] server-side CEL collector started
+root: /home/user4/dialogue-kt
+[2026-06-14 16:26:47] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 16:29:47] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 16:32:02] server-side CEL collector started
+root: /home/user4/dialogue-kt
+[2026-06-14 16:32:02] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 16:35:02] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 16:39:02] server-side CEL collector started
+root: /home/user4/dialogue-kt
+[2026-06-14 16:42:10] server-side CEL collector started
+root: /home/user4/dialogue-kt
+[2026-06-14 16:43:16] server-side CEL collector started
+root: /home/user4/dialogue-kt
+[2026-06-14 16:44:05] server-side CEL collector started
+root: /home/user4/dialogue-kt
+[2026-06-14 16:45:06] server-side CEL collector started
+root: /home/user4/dialogue-kt
+[2026-06-14 16:45:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 16:48:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 16:51:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 16:54:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 16:57:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 17:00:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 17:03:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 17:06:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 17:09:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 17:12:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 17:15:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 17:18:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 17:21:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 17:24:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 17:27:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 17:30:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 17:33:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 17:36:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 17:39:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 17:42:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 17:45:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 17:48:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 17:51:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 17:54:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 17:57:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 18:00:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 18:03:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 18:06:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 18:09:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 18:12:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 18:15:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 18:18:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 18:21:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 18:24:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 18:27:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 18:30:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 18:33:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 18:36:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 18:39:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 18:42:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 18:45:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 18:48:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 18:51:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 18:54:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 18:57:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 19:00:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 19:03:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 19:06:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 19:09:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 19:12:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 19:15:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 19:18:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 19:21:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 19:24:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 19:27:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 19:30:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 19:33:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 19:36:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 19:39:06] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 19:42:07] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 19:45:07] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 19:48:07] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 19:51:07] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 19:54:07] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 19:57:07] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 20:00:07] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 20:03:07] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 20:06:07] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 20:09:07] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 20:12:07] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 20:15:07] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 20:18:07] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 20:21:07] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 20:24:07] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 20:27:07] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 20:30:07] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 20:33:07] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 20:36:07] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 20:39:07] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 20:42:07] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 20:45:07] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 20:48:07] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 20:51:07] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 20:54:07] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 20:57:07] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 21:00:07] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 21:03:07] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 21:06:07] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 21:09:07] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 21:12:07] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 21:15:08] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 21:18:08] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 21:21:08] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting
+[2026-06-14 21:24:08] collecting CEL results
+  cel_mlp_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_adapter_qwen3_1.7b:
+    metrics: ready
+    qual: ready
+    kcs: ready
+  cel_task_conditioned_qwen3_1.7b:
+    metrics: waiting
+    qual: waiting
+    kcs: waiting

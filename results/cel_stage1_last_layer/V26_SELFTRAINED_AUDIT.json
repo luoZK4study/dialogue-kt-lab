@@ -1,0 +1,114 @@
+{
+  "generated_at": "2026-08-12T23:10:12",
+  "models": {
+    "bootstrap": "cel_task_conditioned_lastlayer_v26_bootstrap_qwen3_1.7b",
+    "calibrator_warmup": "cel_task_conditioned_lastlayer_v26_calibrator_warmup_qwen3_1.7b",
+    "joint": "cel_task_conditioned_lastlayer_v26_selftrained_biaswarmup_joint_tinylr_qwen3_1.7b",
+    "baseline_comparison_only": "lmkt_qwen3_1.7b_recert_20260620"
+  },
+  "provenance": {
+    "bootstrap_from_qwen_base": true,
+    "warmup_from_v26_bootstrap": true,
+    "joint_from_v26_warmup": true,
+    "intermediate_stages_did_not_test": true,
+    "final_joint_test_completed": true,
+    "forbidden_initializer_hits": {
+      "bootstrap": [],
+      "calibrator_warmup": [],
+      "joint": []
+    },
+    "provenance_ok": true
+  },
+  "checkpoint_hashes": {
+    "bootstrap": {
+      "adapter": "604fddcd5efdfe5b24d06e6e4b1d43cb8de4d2109471daff7e7e53e1b7cecf3f",
+      "selector": "cf9efcebf4b87b93e679dd8082036375a28a85341afd8fdf53aa6107fa510230"
+    },
+    "calibrator_warmup": {
+      "adapter": "604fddcd5efdfe5b24d06e6e4b1d43cb8de4d2109471daff7e7e53e1b7cecf3f",
+      "selector": "cf9efcebf4b87b93e679dd8082036375a28a85341afd8fdf53aa6107fa510230",
+      "calibrator": "52d3426dc12942186a7d2b0329496cb7c1c9ebce7a18da7265aad38d48d4b40a"
+    },
+    "joint": {
+      "adapter": "95b8e53fa9a6bdfccb95d176b2c47206c5f778db60d5a76c513a621c744375be",
+      "selector": "cf9efcebf4b87b93e679dd8082036375a28a85341afd8fdf53aa6107fa510230",
+      "calibrator": "a42e21823633ab87f75924234904c17bebac5ec28e6522bd5baa6ce6120db19f"
+    }
+  },
+  "parameter_differences": {
+    "bootstrap_to_calibrator_warmup": {
+      "adapter": {
+        "left_tensors": 392,
+        "right_tensors": 392,
+        "common_tensors": 392,
+        "changed_tensors": 0,
+        "max_abs_diff": 0.0,
+        "all_tensors_equal": true
+      },
+      "selector": {
+        "left_tensors": 7,
+        "right_tensors": 7,
+        "common_tensors": 7,
+        "changed_tensors": 0,
+        "max_abs_diff": 0.0,
+        "all_tensors_equal": true
+      }
+    },
+    "calibrator_warmup_to_joint": {
+      "adapter": {
+        "left_tensors": 392,
+        "right_tensors": 392,
+        "common_tensors": 392,
+        "changed_tensors": 392,
+        "max_abs_diff": 0.0014401599764823914,
+        "all_tensors_equal": false
+      },
+      "selector": {
+        "left_tensors": 7,
+        "right_tensors": 7,
+        "common_tensors": 7,
+        "changed_tensors": 0,
+        "max_abs_diff": 0.0,
+        "all_tensors_equal": true
+      },
+      "calibrator": {
+        "left_tensors": 1,
+        "right_tensors": 1,
+        "common_tensors": 1,
+        "changed_tensors": 1,
+        "max_abs_diff": 4.6253204345703125e-05,
+        "all_tensors_equal": false
+      }
+    },
+    "warmup_freeze_ok": true,
+    "joint_update_ok": true
+  },
+  "metrics": {
+    "baseline": {
+      "loss": 0.5928,
+      "overall_acc": 69.22,
+      "overall_auc": 74.95,
+      "final_acc": 61.17,
+      "final_auc": 75.32
+    },
+    "joint": {
+      "loss": 0.6657,
+      "overall_acc": 70.03,
+      "overall_auc": 75.38,
+      "final_acc": 66.8,
+      "final_auc": 77.26
+    }
+  },
+  "comparison": {
+    "deltas_vs_baseline": {
+      "overall_acc": 0.8100000000000023,
+      "overall_auc": 0.4299999999999926,
+      "final_acc": 5.6299999999999955,
+      "final_auc": 1.940000000000012
+    },
+    "beats_baseline_overall_gate": true,
+    "beats_baseline_final_gate": true,
+    "beats_baseline_all_four": true
+  },
+  "audit_pass": true
+}

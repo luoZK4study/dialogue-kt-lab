@@ -1,0 +1,297 @@
+{
+  "artifact_hashes": {
+    "bootstrap": {
+      "adapter": "e946ab208b1204c15d0beb7d8c05b483f3433d931a1e6f03bde18d83ad6dab0c",
+      "environment": "210b2cb7d07bf57c884c54047f024943c6ae0158433461604d86c12d5a1633ed",
+      "manifest": "657d32a9c23bd16fce2fac2477ddfb4d5b7ba32aa1c664c193d9e3e1dbc268a4",
+      "selector": "d5a87e82ce4292dc2d9cebabf2154419f051cf0ecee65f16afaa0f8414964400"
+    },
+    "calibrator_warmup": {
+      "adapter": "e946ab208b1204c15d0beb7d8c05b483f3433d931a1e6f03bde18d83ad6dab0c",
+      "calibrator": "c6be70847e706048bf4ea06bc5337f57aa682abaf09222b15858e0c8ac0a0860",
+      "environment": "210b2cb7d07bf57c884c54047f024943c6ae0158433461604d86c12d5a1633ed",
+      "manifest": "aa1ee7af0315363fa4b90550412246c802e08931c60e0246ea67920386b463ee",
+      "selector": "d5a87e82ce4292dc2d9cebabf2154419f051cf0ecee65f16afaa0f8414964400"
+    },
+    "joint": {
+      "adapter": "5be44f158eea8471ebab6526ac4fe070d12fe1002eccf8dad8acf55557e6492c",
+      "calibrator": "c2e99decea28da2f190bbbc7b49c583628843b52c5deeff9da77bf75e6953fe5",
+      "environment": "53e38c1a02c965b3272f913de3aed711966957bf17ec856153f1e2f17c517a7b",
+      "manifest": "2f4d417da6ea377d391e56bf04545e268319b351ce380ef92d4b52bfa57c2e5f",
+      "selector": "c1d2112533fc08cf983143ac2cff7ce69dd0389d578bdceea35641f31339d30e"
+    }
+  },
+  "audit_pass": true,
+  "beats_stage1_overall_auc": true,
+  "candidate_id": "stage2_mlp_topk20_beta005_seed1221",
+  "deltas": {
+    "baseline": {
+      "final_acc": 2.710000000000001,
+      "final_auc": 0.9700000000000131,
+      "overall_acc": -0.7600000000000051,
+      "overall_auc": 0.519999999999996
+    },
+    "stage1_v26": {
+      "final_acc": -2.9199999999999946,
+      "final_auc": -0.9699999999999989,
+      "overall_acc": -1.5700000000000074,
+      "overall_auc": 0.09000000000000341
+    }
+  },
+  "diagnostics": {
+    "cal_bias": 0.3188,
+    "env_input_cosine": 0.0037,
+    "env_input_l2_mean": 3053.3006,
+    "env_l2_mean": 1.4133,
+    "env_non_rationale_frac": 0.8,
+    "env_non_selected_score": 0.8726,
+    "env_rationale_cosine": -0.005,
+    "env_scaled_l2_mean": 0.0707,
+    "env_selected_score": 0.9622,
+    "env_split_frac": 0.2,
+    "env_to_rationale_l2_ratio": 0.0005,
+    "gate_abs_mean": 0.8905,
+    "gate_max": 1.411287e-05,
+    "gate_mean": -0.8905,
+    "gate_min": -0.9939,
+    "gate_neg_frac": 1.0,
+    "gate_pos_frac": 9.241827e-07,
+    "injected_mean": 1.6582,
+    "post_prob_invalid_frac": 0.0,
+    "post_prob_label_invalid_frac": 0.0,
+    "post_prob_label_out_of_range_frac": 0.0,
+    "post_prob_label_raw_max": 0.4736,
+    "post_prob_label_raw_min": 0.4736,
+    "post_prob_label_safe_max": 0.4736,
+    "post_prob_label_safe_min": 0.4736,
+    "post_prob_label_sanitized_frac": 0.0,
+    "post_prob_out_of_range_frac": 0.0,
+    "post_prob_raw_max": 0.4859,
+    "post_prob_raw_min": 0.4859,
+    "post_prob_safe_max": 0.4859,
+    "post_prob_safe_min": 0.4859,
+    "post_prob_sanitized_frac": 0.0,
+    "pre_prob_invalid_frac": 0.0,
+    "pre_prob_out_of_range_frac": 0.0,
+    "pre_prob_raw_max": 0.4339,
+    "pre_prob_raw_min": 0.4339,
+    "pre_prob_safe_max": 0.4339,
+    "pre_prob_safe_min": 0.4339,
+    "pre_prob_sanitized_frac": 0.0,
+    "rationale_l2_mean": 2617.8294
+  },
+  "diagnostics_finite": true,
+  "environment_fp32_ok": true,
+  "generated_at": "2026-08-14T18:07:40",
+  "joint_environment_changed": true,
+  "joint_selector_changed": true,
+  "joint_update_ok": true,
+  "manifests": {
+    "bootstrap": {
+      "base_model": "/home/user4/.cache/huggingface/hub/qwen/Qwen3-1.7B",
+      "candidate_id": "stage2_mlp_topk20_beta005_seed1221",
+      "cel_application_mode": "token_residual",
+      "cel_gamma": 0.3,
+      "cel_hook_site": "last_block",
+      "cel_hook_timing": "pre_block",
+      "cel_injection_variant": "scalar_gate",
+      "cel_layer_idx": -1,
+      "cel_mode": "task_conditioned",
+      "env_beta": 0.05,
+      "env_ffn_dim": 1024,
+      "env_hidden_dim": 512,
+      "env_mode": "mlp",
+      "env_num_heads": 4,
+      "env_num_layers": 1,
+      "env_sigmoid_temperature": 5.0,
+      "env_split_mode": "topk_abs",
+      "env_topk_ratio": 0.2,
+      "fresh_init_required": true,
+      "model_init_seed": 1221,
+      "model_name": "cel_stage2_mlp_topk20_beta005_seed1221_bootstrap_qwen3_1.7b",
+      "parent_model_name": null,
+      "phase": "bootstrap",
+      "schema_version": 1
+    },
+    "calibrator_warmup": {
+      "base_model": "/home/user4/.cache/huggingface/hub/qwen/Qwen3-1.7B",
+      "candidate_id": "stage2_mlp_topk20_beta005_seed1221",
+      "cel_application_mode": "token_residual",
+      "cel_gamma": 0.3,
+      "cel_hook_site": "last_block",
+      "cel_hook_timing": "pre_block",
+      "cel_injection_variant": "scalar_gate",
+      "cel_layer_idx": -1,
+      "cel_mode": "task_conditioned",
+      "env_beta": 0.05,
+      "env_ffn_dim": 1024,
+      "env_hidden_dim": 512,
+      "env_mode": "mlp",
+      "env_num_heads": 4,
+      "env_num_layers": 1,
+      "env_sigmoid_temperature": 5.0,
+      "env_split_mode": "topk_abs",
+      "env_topk_ratio": 0.2,
+      "fresh_init_required": true,
+      "model_init_seed": 1221,
+      "model_name": "cel_stage2_mlp_topk20_beta005_seed1221_calibrator_warmup_qwen3_1.7b",
+      "parent_model_name": "cel_stage2_mlp_topk20_beta005_seed1221_bootstrap_qwen3_1.7b",
+      "phase": "calibrator_warmup",
+      "schema_version": 1
+    },
+    "joint": {
+      "base_model": "/home/user4/.cache/huggingface/hub/qwen/Qwen3-1.7B",
+      "candidate_id": "stage2_mlp_topk20_beta005_seed1221",
+      "cel_application_mode": "token_residual",
+      "cel_gamma": 0.3,
+      "cel_hook_site": "last_block",
+      "cel_hook_timing": "pre_block",
+      "cel_injection_variant": "scalar_gate",
+      "cel_layer_idx": -1,
+      "cel_mode": "task_conditioned",
+      "env_beta": 0.05,
+      "env_ffn_dim": 1024,
+      "env_hidden_dim": 512,
+      "env_mode": "mlp",
+      "env_num_heads": 4,
+      "env_num_layers": 1,
+      "env_sigmoid_temperature": 5.0,
+      "env_split_mode": "topk_abs",
+      "env_topk_ratio": 0.2,
+      "fresh_init_required": true,
+      "model_init_seed": 1221,
+      "model_name": "cel_stage2_mlp_topk20_beta005_seed1221_joint_qwen3_1.7b",
+      "parent_model_name": "cel_stage2_mlp_topk20_beta005_seed1221_calibrator_warmup_qwen3_1.7b",
+      "phase": "joint",
+      "schema_version": 1
+    }
+  },
+  "metrics": {
+    "baseline": {
+      "final_acc": 61.17,
+      "final_auc": 75.32,
+      "loss": 0.5928,
+      "overall_acc": 69.22,
+      "overall_auc": 74.95
+    },
+    "stage1_v26": {
+      "final_acc": 66.8,
+      "final_auc": 77.26,
+      "loss": 0.6657,
+      "overall_acc": 70.03,
+      "overall_auc": 75.38
+    },
+    "stage2": {
+      "final_acc": 63.88,
+      "final_auc": 76.29,
+      "loss": 0.6051,
+      "overall_acc": 68.46,
+      "overall_auc": 75.47
+    }
+  },
+  "models": {
+    "bootstrap": "cel_stage2_mlp_topk20_beta005_seed1221_bootstrap_qwen3_1.7b",
+    "calibrator_warmup": "cel_stage2_mlp_topk20_beta005_seed1221_calibrator_warmup_qwen3_1.7b",
+    "joint": "cel_stage2_mlp_topk20_beta005_seed1221_joint_qwen3_1.7b"
+  },
+  "parameter_differences": {
+    "bootstrap_to_warmup": {
+      "adapter": {
+        "all_tensors_equal": true,
+        "changed_tensors": 0,
+        "common_tensors": 392,
+        "left_tensors": 392,
+        "max_abs_diff": 0.0,
+        "right_tensors": 392
+      },
+      "environment": {
+        "all_tensors_equal": true,
+        "changed_tensors": 0,
+        "common_tensors": 6,
+        "left_tensors": 6,
+        "max_abs_diff": 0.0,
+        "right_tensors": 6
+      },
+      "selector": {
+        "all_tensors_equal": true,
+        "changed_tensors": 0,
+        "common_tensors": 7,
+        "left_tensors": 7,
+        "max_abs_diff": 0.0,
+        "right_tensors": 7
+      }
+    },
+    "warmup_to_joint": {
+      "adapter": {
+        "all_tensors_equal": false,
+        "changed_tensors": 392,
+        "common_tensors": 392,
+        "left_tensors": 392,
+        "max_abs_diff": 0.0015058154240250587,
+        "right_tensors": 392
+      },
+      "calibrator": {
+        "all_tensors_equal": false,
+        "changed_tensors": 1,
+        "common_tensors": 1,
+        "left_tensors": 1,
+        "max_abs_diff": 1.099705696105957e-05,
+        "right_tensors": 1
+      },
+      "environment": {
+        "all_tensors_equal": false,
+        "changed_tensors": 6,
+        "common_tensors": 6,
+        "left_tensors": 6,
+        "max_abs_diff": 0.000449737417511642,
+        "right_tensors": 6
+      },
+      "selector": {
+        "all_tensors_equal": false,
+        "changed_tensors": 7,
+        "common_tensors": 7,
+        "left_tensors": 7,
+        "max_abs_diff": 0.00045681907795369625,
+        "right_tensors": 7
+      }
+    }
+  },
+  "provenance": {
+    "config_consistency_ok": true,
+    "forbidden_initializer_hits": {
+      "bootstrap": [],
+      "calibrator_warmup": [],
+      "joint": []
+    },
+    "manifest_chain_ok": true,
+    "provenance_ok": true
+  },
+  "selector_fp32_ok": true,
+  "state_dtypes": {
+    "bootstrap": {
+      "environment": [
+        "torch.float32"
+      ],
+      "selector": [
+        "torch.float32"
+      ]
+    },
+    "calibrator_warmup": {
+      "environment": [
+        "torch.float32"
+      ],
+      "selector": [
+        "torch.float32"
+      ]
+    },
+    "joint": {
+      "environment": [
+        "torch.float32"
+      ],
+      "selector": [
+        "torch.float32"
+      ]
+    }
+  },
+  "warmup_freeze_ok": true
+}

@@ -1,0 +1,8 @@
+Loss: 0.6363
+Overall (1985 samples):
+GT - True: 940.0, False: 1045.0; Pred - True: 599.0, False: 1386.0
+Acc: 66.90, AUC: 74.98, Prec: 73.62, Rec: 46.91, F1: 57.31
+Final Turn (515 samples):
+GT - True: 376.0, False: 139.0; Pred - True: 167.0, False: 348.0
+Acc: 52.04, AUC: 74.27, Prec: 88.62, Rec: 39.36, F1: 54.51
+CEL Diagnostics: gate_mean: 0.0000, gate_abs_mean: 0.0000, gate_pos_frac: 0.0000, gate_neg_frac: 0.0000, gate_max: 0.0000, gate_min: 0.0000, injected_mean: 1.1560, cal_bias: -0.0011, post_prob_invalid_frac: 0.0000, post_prob_label_invalid_frac: 0.0000, post_prob_label_out_of_range_frac: 0.0000, post_prob_label_raw_max: 0.4736, post_prob_label_raw_min: 0.4736, post_prob_label_safe_max: 0.4736, post_prob_label_safe_min: 0.4736, post_prob_label_sanitized_frac: 0.0000, post_prob_out_of_range_frac: 0.0000, post_prob_raw_max: 0.3700, post_prob_raw_min: 0.3700, post_prob_safe_max: 0.3700, post_prob_safe_min: 0.3700, post_prob_sanitized_frac: 0.0000, pre_prob_invalid_frac: 0.0000, pre_prob_out_of_range_frac: 0.0000, pre_prob_raw_max: 0.3701, pre_prob_raw_min: 0.3701, pre_prob_safe_max: 0.3701, pre_prob_safe_min: 0.3701, pre_prob_sanitized_frac: 0.0000

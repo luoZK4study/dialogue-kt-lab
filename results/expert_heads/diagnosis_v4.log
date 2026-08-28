@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/home/user4/dialogue-kt/scripts/expert_heads/diagnose_turn_attention.py", line 10, in <module>
+    os.environ["SDPA_ATTENTION_BACKEND"] = "eager"  # MUST be before any torch/transformers import
+NameError: name 'os' is not defined

@@ -1,0 +1,5 @@
+[2026-06-20 11:12:06] baseline overall auc = 74.95
+[2026-06-20 11:12:06] followup continuation margin = +0.20 over baseline
+[2026-06-20 11:12:06] best existing cel model = cel_task_conditioned_lastlayer_v1_qwen3_1.7b (auc=75.29)
+[2026-06-20 11:12:06] existing CEL result already beats baseline by continuation margin; no followup runs needed
+[2026-06-20 11:12:06] followup loop found a CEL model that beats baseline

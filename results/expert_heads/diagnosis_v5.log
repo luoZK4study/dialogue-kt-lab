@@ -1,0 +1,21 @@
+Loading model...
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   0%|          | 1/311 [00:00<00:50,  6.17it/s]Loading weights:  11%|█▏        | 35/311 [00:00<00:01, 161.51it/s]Loading weights:  23%|██▎       | 70/311 [00:00<00:01, 221.39it/s]Loading weights:  35%|███▌      | 109/311 [00:00<00:00, 276.79it/s]Loading weights:  45%|████▍     | 139/311 [00:00<00:00, 276.64it/s]Loading weights:  54%|█████▍    | 168/311 [00:00<00:00, 274.93it/s]Loading weights:  63%|██████▎   | 197/311 [00:00<00:00, 264.61it/s]Loading weights:  72%|███████▏  | 225/311 [00:00<00:00, 258.73it/s]Loading weights:  82%|████████▏ | 254/311 [00:01<00:00, 267.51it/s]Loading weights:  92%|█████████▏| 286/311 [00:01<00:00, 282.65it/s]Loading weights: 100%|██████████| 311/311 [00:01<00:00, 258.20it/s]
+Initializing inference-time model from fine-tuned LoRA adapters
+Model: 28 layers, 16 heads/layer
+Analyzing 15 samples...
+Focusing on layers [19, 20, 21, 22, 23, 24, 25, 26, 27], heads [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+  0%|          | 0/15 [00:00<?, ?it/s]/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/transformers/models/qwen3/modeling_qwen3.py:143: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at ../aten/src/ATen/Context.cpp:185.)
+  freqs = (inv_freq_expanded.float() @ position_ids_expanded.float()).transpose(1, 2)
+/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/torch/nn/modules/linear.py:117: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at ../aten/src/ATen/Context.cpp:185.)
+  return F.linear(input, self.weight, self.bias)
+[transformers] `sdpa` attention does not support `output_attentions=True`. Please set your attention to `eager` if you want any of these features.
+  7%|▋         | 1/15 [00:01<00:16,  1.18s/it] 13%|█▎        | 2/15 [00:03<00:26,  2.01s/it] 20%|██        | 3/15 [00:04<00:16,  1.41s/it] 27%|██▋       | 4/15 [00:04<00:11,  1.06s/it] 33%|███▎      | 5/15 [00:05<00:08,  1.23it/s] 40%|████      | 6/15 [00:05<00:06,  1.41it/s] 47%|████▋     | 7/15 [00:11<00:18,  2.37s/it] 53%|█████▎    | 8/15 [00:14<00:17,  2.48s/it] 60%|██████    | 9/15 [00:15<00:11,  2.00s/it] 67%|██████▋   | 10/15 [00:16<00:09,  1.83s/it] 73%|███████▎  | 11/15 [00:17<00:05,  1.43s/it] 80%|████████  | 12/15 [00:17<00:03,  1.18s/it] 87%|████████▋ | 13/15 [00:18<00:02,  1.00s/it]100%|██████████| 15/15 [00:20<00:00,  1.02it/s]100%|██████████| 15/15 [00:20<00:00,  1.36s/it]
+
+Processed 70 turn-attention pairs
+
+=== Top 10 Attention Heads ===
+Concentration stats: NO VALID HEADS FOUND
+Expert candidates: 0/0
+
+❌ No expert heads. Skip implementation.
+Saved to results/expert_heads/attention_diagnosis.json

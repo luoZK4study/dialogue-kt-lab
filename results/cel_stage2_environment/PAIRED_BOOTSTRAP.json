@@ -1,0 +1,334 @@
+{
+  "bootstrap_samples": 10000,
+  "candidates": {
+    "stage2_mlp_topk20_beta005_seed1221": {
+      "direction": "mlp",
+      "qual": "results/cel_stage2_environment/qual/qual_cel_stage2_mlp_topk20_beta005_seed1221_joint_qwen3_1.7b.csv",
+      "subsets": {
+        "final": {
+          "bootstrap_delta": {
+            "acc": {
+              "ci95_high": 0.5825242718446617,
+              "ci95_low": -6.407766990291265,
+              "mean": -2.9183689320388346,
+              "median": -2.9126213592233015,
+              "probability_positive": 0.0428,
+              "samples": 10000
+            },
+            "auc": {
+              "ci95_high": 1.55965704330512,
+              "ci95_low": -3.521506353599339,
+              "mean": -0.964920654452746,
+              "median": -0.9550648383162752,
+              "probability_positive": 0.2274,
+              "samples": 10000
+            }
+          },
+          "candidate": {
+            "acc": 63.883495145631066,
+            "auc": 76.28673656819225
+          },
+          "observed_delta": {
+            "acc": -2.9126213592233015,
+            "auc": -0.977728455533466
+          },
+          "positive_rows": 376,
+          "reference": {
+            "acc": 66.79611650485437,
+            "auc": 77.26446502372572
+          },
+          "rows": 515
+        },
+        "non_final": {
+          "bootstrap_delta": {
+            "acc": {
+              "ci95_high": 0.749842371183786,
+              "ci95_low": -2.9179775031615334,
+              "mean": -1.071896226010264,
+              "median": -1.0700671281828704,
+              "probability_positive": 0.1175,
+              "samples": 10000
+            },
+            "auc": {
+              "ci95_high": 2.4862138577933655,
+              "ci95_low": -0.2359240180759524,
+              "mean": 1.1267296759327237,
+              "median": 1.1299260111665959,
+              "probability_positive": 0.9486,
+              "samples": 10000
+            }
+          },
+          "candidate": {
+            "acc": 70.06802721088435,
+            "auc": 77.16053731623691
+          },
+          "observed_delta": {
+            "acc": -1.088435374149654,
+            "auc": 1.1070796737275543
+          },
+          "positive_rows": 564,
+          "reference": {
+            "acc": 71.156462585034,
+            "auc": 76.05345764250936
+          },
+          "rows": 1470
+        },
+        "overall": {
+          "bootstrap_delta": {
+            "acc": {
+              "ci95_high": 0.14655772627706934,
+              "ci95_low": -3.2258471198737597,
+              "mean": -1.5511695585583725,
+              "median": -1.5488367606717048,
+              "probability_positive": 0.0323,
+              "samples": 10000
+            },
+            "auc": {
+              "ci95_high": 1.322312370916487,
+              "ci95_low": -1.1290191879335179,
+              "mean": 0.10522808461720387,
+              "median": 0.10728520277522335,
+              "probability_positive": 0.5697,
+              "samples": 10000
+            }
+          },
+          "candidate": {
+            "acc": 68.46347607052897,
+            "auc": 75.4732261020055
+          },
+          "observed_delta": {
+            "acc": -1.5617128463476035,
+            "auc": 0.09650819505243646
+          },
+          "positive_rows": 940,
+          "reference": {
+            "acc": 70.02518891687657,
+            "auc": 75.37671790695306
+          },
+          "rows": 1985
+        }
+      }
+    },
+    "stage2_shuffle_topk20_beta010_seed1221": {
+      "direction": "shuffle",
+      "qual": "results/cel_stage2_environment/qual/qual_cel_stage2_shuffle_topk20_beta010_seed1221_joint_qwen3_1.7b.csv",
+      "subsets": {
+        "final": {
+          "bootstrap_delta": {
+            "acc": {
+              "ci95_high": -0.5825242718446475,
+              "ci95_low": -7.961165048543698,
+              "mean": -4.298058252427186,
+              "median": -4.271844660194176,
+              "probability_positive": 0.0104,
+              "samples": 10000
+            },
+            "auc": {
+              "ci95_high": -1.4477692587808435,
+              "ci95_low": -7.6391627475601664,
+              "mean": -4.460888240900207,
+              "median": -4.423845359906537,
+              "probability_positive": 0.0015,
+              "samples": 10000
+            }
+          },
+          "candidate": {
+            "acc": 62.5242718446602,
+            "auc": 72.7948492270014
+          },
+          "observed_delta": {
+            "acc": -4.271844660194169,
+            "auc": -4.469615796724327
+          },
+          "positive_rows": 376,
+          "reference": {
+            "acc": 66.79611650485437,
+            "auc": 77.26446502372572
+          },
+          "rows": 515
+        },
+        "non_final": {
+          "bootstrap_delta": {
+            "acc": {
+              "ci95_high": 1.9661064559131578,
+              "ci95_low": -2.439152132443097,
+              "mean": -0.24356510751406582,
+              "median": -0.25600023592981813,
+              "probability_positive": 0.4035,
+              "samples": 10000
+            },
+            "auc": {
+              "ci95_high": 1.972958124687429,
+              "ci95_low": -1.5463689005141728,
+              "mean": 0.2278944082807634,
+              "median": 0.23246784385958819,
+              "probability_positive": 0.6028,
+              "samples": 10000
+            }
+          },
+          "candidate": {
+            "acc": 70.8843537414966,
+            "auc": 76.25512736210919
+          },
+          "observed_delta": {
+            "acc": -0.27210884353740994,
+            "auc": 0.2016697195998347
+          },
+          "positive_rows": 564,
+          "reference": {
+            "acc": 71.156462585034,
+            "auc": 76.05345764250936
+          },
+          "rows": 1470
+        },
+        "overall": {
+          "bootstrap_delta": {
+            "acc": {
+              "ci95_high": 0.6184930133442395,
+              "ci95_low": -3.197999664733648,
+              "mean": -1.2968257666879859,
+              "median": -1.3052208835341332,
+              "probability_positive": 0.0876,
+              "samples": 10000
+            },
+            "auc": {
+              "ci95_high": 0.2657019829134102,
+              "ci95_low": -2.769494768251131,
+              "mean": -1.2195779103202187,
+              "median": -1.2010049439401769,
+              "probability_positive": 0.0558,
+              "samples": 10000
+            }
+          },
+          "candidate": {
+            "acc": 68.71536523929471,
+            "auc": 74.14272625470834
+          },
+          "observed_delta": {
+            "acc": -1.3098236775818606,
+            "auc": -1.2339916522447254
+          },
+          "positive_rows": 940,
+          "reference": {
+            "acc": 70.02518891687657,
+            "auc": 75.37671790695306
+          },
+          "rows": 1985
+        }
+      }
+    },
+    "stage2_transformer_topk20_beta010_centeredrms010_seed1221": {
+      "direction": "transformer",
+      "qual": "results/cel_stage2_environment/qual/qual_cel_stage2_transformer_topk20_beta010_centeredrms010_seed1221_joint_qwen3_1.7b.csv",
+      "subsets": {
+        "final": {
+          "bootstrap_delta": {
+            "acc": {
+              "ci95_high": 3.888349514563055,
+              "ci95_low": -3.106796116504867,
+              "mean": 0.3881553398058253,
+              "median": 0.38834951456310307,
+              "probability_positive": 0.5656,
+              "samples": 10000
+            },
+            "auc": {
+              "ci95_high": 0.4388898147050566,
+              "ci95_low": -5.5267944497305335,
+              "mean": -2.5067304071461805,
+              "median": -2.4843935155652375,
+              "probability_positive": 0.0499,
+              "samples": 10000
+            }
+          },
+          "candidate": {
+            "acc": 67.18446601941747,
+            "auc": 74.7292591458748
+          },
+          "observed_delta": {
+            "acc": 0.38834951456310307,
+            "auc": -2.5352058778509132
+          },
+          "positive_rows": 376,
+          "reference": {
+            "acc": 66.79611650485437,
+            "auc": 77.26446502372572
+          },
+          "rows": 515
+        },
+        "non_final": {
+          "bootstrap_delta": {
+            "acc": {
+              "ci95_high": -0.7416774066662208,
+              "ci95_low": -4.888057742605508,
+              "mean": -2.7760880073092813,
+              "median": -2.774018944519625,
+              "probability_positive": 0.0031,
+              "samples": 10000
+            },
+            "auc": {
+              "ci95_high": 1.7027937669134696,
+              "ci95_low": -1.2335341176243262,
+              "mean": 0.2582888493411399,
+              "median": 0.25874963403411044,
+              "probability_positive": 0.633,
+              "samples": 10000
+            }
+          },
+          "candidate": {
+            "acc": 68.36734693877551,
+            "auc": 76.30160631252642
+          },
+          "observed_delta": {
+            "acc": -2.7891156462584945,
+            "auc": 0.2481486700170592
+          },
+          "positive_rows": 564,
+          "reference": {
+            "acc": 71.156462585034,
+            "auc": 76.05345764250936
+          },
+          "rows": 1470
+        },
+        "overall": {
+          "bootstrap_delta": {
+            "acc": {
+              "ci95_high": -0.10293228408827952,
+              "ci95_low": -3.804667277465952,
+              "mean": -1.955072259276874,
+              "median": -1.953117051366398,
+              "probability_positive": 0.017,
+              "samples": 10000
+            },
+            "auc": {
+              "ci95_high": 1.178710411739712,
+              "ci95_low": -1.445426328949475,
+              "mean": -0.12157734527600214,
+              "median": -0.11298724801313398,
+              "probability_positive": 0.432,
+              "samples": 10000
+            }
+          },
+          "candidate": {
+            "acc": 68.06045340050377,
+            "auc": 75.24615697851979
+          },
+          "observed_delta": {
+            "acc": -1.964735516372798,
+            "auc": -0.13056092843326894
+          },
+          "positive_rows": 940,
+          "reference": {
+            "acc": 70.02518891687657,
+            "auc": 75.37671790695306
+          },
+          "rows": 1985
+        }
+      }
+    }
+  },
+  "dialogue_clusters": 515,
+  "generated_at": "2026-08-15T15:38:17",
+  "reference_name": "a_module_reference",
+  "reference_qual": "results/cel_stage1_last_layer/qual/qual_cel_task_conditioned_lastlayer_v26_selftrained_biaswarmup_joint_tinylr_qwen3_1.7b.csv",
+  "seed": 1221
+}

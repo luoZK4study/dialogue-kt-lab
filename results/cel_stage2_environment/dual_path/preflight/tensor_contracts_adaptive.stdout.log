@@ -1,0 +1,10 @@
+/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/torch/utils/checkpoint.py:1399: FutureWarning: `torch.cpu.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cpu', args...)` instead.
+  with device_autocast_ctx, torch.cpu.amp.autocast(**cpu_autocast_kwargs), recompute_context:  # type: ignore[attr-defined]
+/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/torch/nn/modules/transformer.py:307: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  warnings.warn(f"enable_nested_tensor is True, but self.use_nested_tensor is False because {why_not_sparsity_fast_path}")
+/opt/anaconda3/envs/luo_2/lib/python3.10/site-packages/torch/utils/checkpoint.py:295: FutureWarning: `torch.cpu.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cpu', args...)` instead.
+  with torch.enable_grad(), device_autocast_ctx, torch.cpu.amp.autocast(**ctx.cpu_autocast_kwargs):  # type: ignore[attr-defined]
+Stage 2 serial/expanded gradient equivalence passed on cpu: max_abs_diff=2.9802322e-08
+Stage 2 tensor contracts passed on cpu
+Stage 2 serial/expanded gradient equivalence passed on cuda: max_abs_diff=1.1920929e-07
+Stage 2 tensor contracts passed on cuda
