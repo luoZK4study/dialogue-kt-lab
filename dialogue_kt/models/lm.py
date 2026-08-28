@@ -1,5 +1,6 @@
+import importlib
+
 import torch
-import bitsandbytes as bnb
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 from peft import LoraConfig, PeftModel, get_peft_model, prepare_model_for_kbit_training
 
@@ -13,12 +14,14 @@ bnb_config = BitsAndBytesConfig(
     bnb_4bit_quant_type="nf4",
 )
 
-_quantize_available = True  # bitsandbytes is working with torch 2.12.0 + CUDA 13.0
-
-def get_base_model(base_model_name: str, tokenizer: AutoTokenizer, quantize: bool, eager_attention: bool = False):
-    if quantize and not _quantize_available:
-        print("WARNING: Quantization requested but bitsandbytes not available. Running without quantization.")
-        quantize = False
+def get_base_model(base_model_name: str, tokenizer: AutoTokenizer, quantize: bool,
+                   eager_attention: bool = False, use_gradient_checkpointing: bool = True):
+    if quantize:
+        try:
+            importlib.import_module("bitsandbytes")
+        except Exception as exc:
+            print(f"WARNING: Quantization requested but bitsandbytes not available ({exc}). Running without quantization.")
+            quantize = False
     # When quantizing, bitsandbytes handles device placement — cannot use explicit device_map
     device_map = None if quantize else {"": 0}
     attn_kwargs = {"attn_implementation": "eager"} if eager_attention else {}
@@ -36,13 +39,17 @@ def get_base_model(base_model_name: str, tokenizer: AutoTokenizer, quantize: boo
     base_model.config.pretraining_tp = 1
     # Enable gradient checkpointing to save memory
     # use_reentrant=True preserves the legacy behavior (less memory than non-reentrant)
-    base_model.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": True})
+    if use_gradient_checkpointing:
+        base_model.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": True})
+    else:
+        base_model.gradient_checkpointing_disable()
     return base_model
 
 def get_model(base_model_name: str, test: bool,
               model_name: str = None, pt_model_name: str = None,
               r: int = None, lora_alpha: int = None,
-              quantize: bool = True, use_gradient_checkpointing: bool = True):
+              quantize: bool = True, use_gradient_checkpointing: bool = True,
+              eager_attention: bool = False):
     tokenizer = AutoTokenizer.from_pretrained(base_model_name, padding_side="right", trust_remote_code=True)
     # Set pad_token: if bos_token exists use it, otherwise use eos_token
     if tokenizer.pad_token is None:
@@ -50,7 +57,13 @@ def get_model(base_model_name: str, test: bool,
             tokenizer.pad_token = tokenizer.bos_token
         else:
             tokenizer.pad_token = tokenizer.eos_token
-    model = get_base_model(base_model_name, tokenizer, quantize)
+    model = get_base_model(
+        base_model_name,
+        tokenizer,
+        quantize,
+        eager_attention=eager_attention,
+        use_gradient_checkpointing=use_gradient_checkpointing,
+    )
     if test and model_name:
         # Note we are loading adapter on quantized model and not merging
         # Recommended here - https://huggingface.co/docs/trl/main/en/dpo_trainer#downsides-to-merging-qlora-before-dpo-approach-2

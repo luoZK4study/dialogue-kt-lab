@@ -2,6 +2,7 @@ from typing import List, Union
 import json
 import re
 from ast import literal_eval
+from pathlib import Path
 import pandas as pd
 
 COMTA_SUBJECTS = ["Elementary", "Algebra", "Trigonometry", "Geometry"]
@@ -173,11 +174,31 @@ def get_model_file_suffix(args, fold = None):
         model_name = args.model_type
     return f"{args.dataset}_{model_name}_agg{args.agg}" + suffix
 
+def _ensure_parent(path: Path):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    return str(path)
+
+def get_results_dir(args, artifact_type: str = None):
+    assert artifact_type in (None, "metrics", "kcs", "qual")
+    if getattr(args, "result_subdir", None):
+        base = Path("results") / args.result_subdir
+        if artifact_type:
+            return str(base / artifact_type)
+        return str(base)
+    if getattr(args, "cel_mode", None):
+        base = Path("results/cel_stage1")
+        if artifact_type:
+            return str(base / artifact_type)
+        return str(base)
+    return "results"
+
 def get_kc_result_filename(args, fold):
-    return f"results/kcs_{get_model_file_suffix(args, fold)}.json"
+    results_dir = Path(get_results_dir(args, "kcs"))
+    return _ensure_parent(results_dir / f"kcs_{get_model_file_suffix(args, fold)}.json")
 
 def get_qual_result_filename(args, fold = None):
-    return f"results/qual_{get_model_file_suffix(args, fold)}.csv"
+    results_dir = Path(get_results_dir(args, "qual"))
+    return _ensure_parent(results_dir / f"qual_{get_model_file_suffix(args, fold)}.csv")
 
 def load_atc():
     with open("data/src/ATC/domain_groups.json") as file:

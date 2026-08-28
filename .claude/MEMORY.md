@@ -1,275 +1,163 @@
-# MEMORY.md — 项目总览
+# MEMORY.md - 当前研究状态
 
-> dialogue-kt 作为知识追踪实验框架，与多篇论文方法结合。  
-> 本文件为总览索引 + 标准工作流，**详细记录、具体实现、完整结论**保存在 `results/<paper_name>/` 目录下。
+## 1. 当前结论
 
----
+- 当前仓库只保留 baseline + CEL 主线。
+- 任务：MathDial ATC Dialogue-KT。
+- 模型：Qwen3-1.7B + LoRA。
+- 论文目标：Overall AUC `76.71`。
+- Baseline：Overall Acc/AUC `69.22 / 74.95`，Final Acc/AUC `61.17 / 75.32`。
+- A 模块参考结果：Overall Acc/AUC `70.03 / 75.38`，Final Acc/AUC `66.80 / 77.26`。
+- Stage 2 首轮三个历史 candidate 均已完成并通过 audit，但采用旧的单路径 environment residual 流程，当前没有 Stage 2 winner。
+- 双路径目标实现、合同测试和审计链已完成；当前按固定 seed=1221 执行三轮配置实验，不启动 Stage 3。
+- 当前三轮状态：Round 1/2 已完成训练、validation 和 validation audit；Round 3 正在执行。Round 1/2 Mixed Overall Acc/AUC 分别为 `66.78 / 72.51`、`65.93 / 72.59`，均低于 A 模块参考 `70.03 / 75.38`。
+- `2026-08-17 18:45 CST` 快照：唯一 supervisor PID `3641318` 仍存活；Round 3 `b_warmup` 训练已完成 `8425/8425`，阶段内 validation 为 `1112/2202`。该快照会过时，新对话必须先通过 SSH alias `3090` 重新只读核对。
 
-## 〇、标准工作流
+A 模块参考结果对应的历史 checkpoint 名称为 `cel_task_conditioned_lastlayer_v26_selftrained_biaswarmup_joint_tinylr_qwen3_1.7b`。该名称只用于工件与审计追溯；方法正文统一称为 **A 模块**。
 
-### 0. 论文准入检查
-```
-0.1 从 literature/ 选取一篇未处理的论文PDF
-0.2 检查论文是否给出代码链接
-    → 有 → 进入阶段1
-    → 无 → 搜索 GitHub 是否有同名/同作者仓库
-        → 有 → 进入阶段1
-        → 无 → 跳过，在下方"论文状态表"标注"无代码，已跳过"
-0.3 检查该论文是否已在"论文状态表"中标记为"已验证"
-    → 是 → 跳过，取下一篇
-    → 否 → 继续
-```
+## 2. 统一术语
 
-### 1. 论文理解
-```
-1.1 使用 PDF 工具提取论文文本（find-skills 或 pymupdf）
-1.2 阅读并记录：核心方法（1-2句）、技术细节、代码仓库URL
-1.3 Clone 代码仓库，阅读关键文件理解实现
-1.4 分析：论文方法中哪些思想/组件可与 dialogue-kt 结合
-```
+- `H`：Qwen 中间层 hidden state。
+- `A`：selector。
+- `a`：A 输出的 token-level 选择强度，经过 `tanh`，范围约为 `[-1, 1]`。
+- `h_r`：证据表征。
+- `h_n`：非证据表征。
+- `h_nb`：B 变换后的非证据表征。
+- `h_m`：混合表征。
 
-### 2. 方法设计
-```
-2.1 提出 ≥3 种结合方案，每种描述核心思想、改动范围、预期效果
-2.2 评估可行性，确定实施优先级
-```
+方法正文不再使用 `score`、`signal`、`gate` 或 `delta` 指代 `a`。历史代码和 diagnostics 的旧字段名只作为兼容键保留。
 
-### 3. 代码实现
-```
-3.1 在 dialogue_kt/ 中实现核心模块（新增文件模块化，修改文件通过参数开关）
-3.2 在 main.py 添加新参数
-3.3 在 scripts/<paper_name>/ 存放分析/评估脚本
-3.4 git add + commit 代码变更（commit message 以论文名开头，如 "feat: <PaperName> integration"）
+## 3. A 模块
+
+当前 A 模块生成的证据表征为：
+
+```text
+a ⊙ H
 ```
 
-### 4. 训练验证
-```
-4.1 rsync 代码到服务器
-4.2 以固定基准做比较：
-    - 论文 LLMKT (Llama-8B) Overall AUC = 76.71%
-    - 1.7B 复现 Overall AUC = 75.99%
-    无需每次重新训练基线
-4.3 每种方法训练 2 epochs（Epoch 2 过拟合则停，否则最多3）
-4.4 记录 Train Loss、Val Loss、过拟合判断
-4.5 若结果异常（AUC≈50%、Loss极高、全部预测同一类别）：
-    首先排查代码bug → 修复后重新训练
-    → 确认非代码问题后再判定"方法无效"
-    （参考 SELFELICIT 经验：attention输出为空、token span匹配失败、import缺失）
-4.6 收集 Overall AUC、Final Turn AUC
-4.7 若方法失败且非bug，分析原因并记录
+当前 Stage 1 注入为：
+
+```text
+H' = H + γ(a ⊙ H)
 ```
 
-### 5. 结果整理
-```
-5.1 建立 results/<paper_name>/ 结构：
-    ├── metrics/   # *.txt
-    ├── kcs/       # *.json
-    ├── qual/      # *.csv
-    └── <PaperName>_实验记录.md
-5.2 实验记录MD包含：论文简介、方法描述、结果表、代码变更、关键发现、bug修复记录
-5.3 模型保存到 saved_models/<paper_name>/
-```
+该路径保留原始 `H`，因此定义为加性证据增强。
 
-### 6. 文档更新
-```
-6.1 更新本文件"论文状态表"和"已结合方法"
-6.2 更新 .claude/CLAUDE.md “项目概述”中的"已有结合"列表 以及 “最新项目结构”
-6.3 更新 .claude/STRUCTURE.md 如新增目录
-6.4 清理 results/ 冗余文件
-6.5 git add + commit 文档更新
-6.6 git push 到 GitHub
+A 模块参考结果保留已经验证的历史训练链：
+
+```text
+Qwen3 raw base
+-> fresh LoRA + A bootstrap
+-> same-candidate calibrator warmup
+-> same-candidate strict joint
+-> final test and audit
 ```
 
-### 7. 交叉结合检查
-```
-7.1 检查当前方法是否可与之前已验证的方法组合
-    → 两个方法作用于不同环节（如改prompt + 改loss）
-    → 两个方法输出/输入可互补
-7.2 若有可行组合 → 回到阶段2，命名为"<PaperA>+<PaperB>"
-7.3 若无 → 回到阶段0，取下一篇论文
-```
+这不是新增模块的默认训练规范。对于统一的 A+B（以及未来 A+B+C 等）任务，所有模块应从第一个 epoch 起在同一计算图、同一 optimizer 和完整目标中端到端训练；历史 warmup 仅作为 provenance 保留。
 
----
+Calibrator 只是共享预测头后的可选概率校准层，不是 A/B 表示学习的必要组件。启用时必须与所有模块从 epoch 1 联合训练，并同时作用于 evidence/mixed；不得默认使用 calibrator-only warmup 或训练后校准。关闭 calibrator 不影响双路径目标的定义；纯单调后处理不改变 AUC，raw/calibrated 概率和校准指标应分开报告。
 
-## 一、论文状态表
+## 4. Stage 2 目标方法
 
-| 论文 | 分类目录 | 代码 | 状态 |
-|------|---------|:--:|:----:|
-| Liu_2025_SelfElicit | evidence_rationale_extraction | ✅ GitHub | ✅ 已验证 |
-| Wang_2025_Stepwise_Informativeness_Search | evidence_rationale_extraction | ✅ GitHub | ✅ 已验证 |
-| Kim_2025_From_Evidence_to_Belief | evidence_rationale_extraction | ✅ GitHub | ✅ 已验证 |
-| Wu_2025_Expert_Heads | evidence_rationale_extraction | ✅ GitHub | ⏭️ 已跳过 |
-| Vasu_2025_HypER | evidence_rationale_extraction | — | ✅ 已验证 (74.38%) |
-| Evidence-R1_2025 | evidence_rationale_extraction | — | ✅ 已验证 (75.60%) |
-| Bian_2025_IBCircuit | information_bottleneck | — | ✅ 已验证 |
-| Conklin_2026_Learning_is_Forgetting | information_bottleneck | — | 📋 待处理 |
-| Oh_2025_Vittle | information_bottleneck | — | 📋 待处理 |
-| Wang_2025_QUITO-X | information_bottleneck | — | ✅ 已编码 |
-| Dai_2025_Pretraining_Context_Compressor | representation_information_compression | — | 📋 待处理 |
-| Kim_2025_KVzip | representation_information_compression | — | 📋 待处理 |
-| Li_2025_500xCompressor | representation_information_compression | — | 📋 待处理 |
-| Zhang_2026_LLM2Comp | representation_information_compression | — | 📋 待处理 |
-| Zhao_2025_DAC | representation_information_compression | — | ✅ 已验证 (75.87%) |
+```text
+w_r = (a + 1) / 2
+w_n = (1 - a) / 2
 
-> 状态说明：📋待处理 → ✅已编码 → 🔄进行中 → ✅已验证 → ⏭️已跳过(不适用)
-
-> **Expert Heads 诊断结论** (2026-06-07): 在 Qwen3-1.7B 上运行了注意力诊断 (`scripts/expert_heads/diagnose_turn_attention.py`)，结果 verdict=FAIL，0 个 stable expert heads。与 SELFELICIT 发现一致——小模型注意力极均匀。已跳过实现。
-
----
-
-## 二、框架概述
-
-**核心任务**: 在导师-学生对话中预测学生对知识点（KC）的掌握程度（True/False 二分类）。
-
-**基座模型**: Qwen3-1.7B + LoRA (r=16, alpha=16)
-
-**数据集**: MathDial (ATC标准标注, 149个KC, 1802训练/451验证/595测试对话)
-
-**评估指标**: Overall AUC（排除每对话第一个标签）、Final Turn AUC
-
-**论文基线**: LLMKT (Llama-3.1-8B) MathDial Overall AUC = **76.71%** (LAK 2025 Table 2)
-
----
-
-## 三、已结合的论文方法
-
-### 2.1 SELFELICIT (ACL 2025)
-
-- **论文**: Liu et al., "SelfElicit: Your Language Model Secretly Knows Where is the Relevant Evidence", ACL 2025
-- **核心思想**: 利用模型深层 Transformer 注意力分数识别上下文中的证据句子，标记后重新推理
-- **结合方式**: 将对话轮次视为"句子"，提取注意力分数→轮次级证据分数→标记高分数轮次→训练/推理时引导模型关注证据轮次
-- **提出方法**: 7种（5种启发式证据标记 + 1种真实注意力证据 + 1种集成）
-- **最佳结果**: 等权集成 AUC **76.24%**（超越1.7B基线75.99%，论文8B为76.71%）
-- **关键发现**: 启发式证据标记（最近N轮）意外优于真实注意力；小模型注意力分数极均匀导致阈值选择困难
-
-> 📁 **详细记录**: `results/selfelicit/SELFELICIT_DialogueKT_实验完整记录.md`  
-> 📁 **代码**: `dialogue_kt/selfelicit.py`, `scripts/selfelicit/`  
-> 📁 **模型**: `saved_models/selfelicit/`
-
-### 3.2 Bayesian Epistemology 系列 (NAACL 2025)
-
-- **论文**: Kim et al., "From Evidence to Belief: A Bayesian Epistemology Approach to Language Models"
-- **核心思想**: LLM 应根据证据的信息量与可靠性调整置信度；Dialogue-KT 中将历史对话视为不同强度证据
-- **结合方式**: Bayesian Evidence Prompting (BEP)，用 `<strong_evidence>` / `<weak_evidence>` 标记最近/弱历史证据；另有 `adaptive_labels` 版本加入过去标签
-- **最佳结果**: BEP-Adaptive-Labels Overall AUC **75.93%**，BEP-Adaptive Overall AUC **75.03%**
-- **结论**: 未超过 1.7B baseline 75.99% 或论文 76.71%；BEP 暂不计入目标方法，仅保留为 ensemble 多样性来源
-
-> 📁 **详细记录**: `results/bayesian_epistemology/BayesianEpistemology_DialogueKT_实验记录.md`  
-> 📁 **代码**: `dialogue_kt/bayesian_epistemology.py`
-
-### 3.3 Stepwise Informativeness Search 系列 (2025)
-
-- **论文**: Wang et al., "Stepwise Informativeness Search for Effective and Efficient LLM Reasoning"
-- **核心思想**: 识别 underutilized prior steps，减少重复/低新颖性步骤，避免长上下文中丢失早中期信息
-- **结合方式**: Stepwise Informativeness Prompting (SIP)，用 trigram information gain 标记非冗余 turn；另有 prune 版本删除低信息 turn
-- **最佳结果**: SIP-Novelty Overall AUC **75.99%**，Final Turn AUC **76.85%**；SIP-Novelty-Prune Overall AUC **75.02%**
-- **结论**: SIP-Novelty 单模型 Overall 与 baseline 持平但 Final Turn 明显提升；prune 版本删除过多上下文导致下降。SIP 不单独计入目标，但与 baseline/BEP 错误模式互补
-- **探索性组合**: 测试集事后等权 `baseline + SIP-Novelty + BEP-Adaptive-Labels` Overall AUC **76.985%**，说明互补性强；但因测试集选组合存在数据泄露，需后续做 validation-selected honest ensemble
-
-> 📁 **详细记录**: `results/informativeness_search/InformativenessSearch_DialogueKT_实验记录.md`  
-> 📁 **代码**: `dialogue_kt/informativeness_search.py`
-
-### 3.4 Expert Heads 系列 (ICLR 2026，初步分析)
-
-- **论文**: Wu et al., "Expert Heads: Robust Evidence Identification for Large Language Models"
-- **代码仓库**: https://github.com/Xuan-Van/ExpertHead
-- **核心思想**: 少数 attention heads 能跨文档排列稳定关注任务相关证据；Qwen 中更深层 heads 偏 evidence selection
-- **初步结合方向**: 对 Dialogue-KT 历史 turn 做 expert-head-guided ranking/pruning 或作为 hallucination/uncertainty 信号
-- **当前状态**: 已提取论文并完成初步分析，尚未实现/训练；注意 SELFELICIT 真注意力在 1.7B 上效果较差，需先做低成本诊断或验证集小规模实验
-
-> 📁 **待建详细记录**: `results/expert_heads/`
-
----
-
-## 四、各模型训练记录
-
-| 模型 | 参数 | 基座 | Overall AUC | 备注 |
-|------|:---:|------|:---:|------|
-| 论文 LLMKT | 8B | Llama-3.1-8B | **76.71%** | 论文基准 |
-| 基线 | 1.7B | Qwen3-1.7B | 75.99% | Epoch 1 即最佳 |
-| SIP-Novelty | 1.7B | Qwen3-1.7B | 75.99% | Final Turn AUC 76.85%，Overall 持平 |
-| BEP-Adaptive-Labels | 1.7B | Qwen3-1.7B | 75.93% | 接近基线但未超过 |
-| SE-Adaptive | 1.7B | Qwen3-1.7B | 75.79% | 最佳单一SE方法 |
-| SE-Combined | 1.7B | Qwen3-1.7B | 75.32% | 最佳Final Turn (76.66%) |
-| BEP-Adaptive | 1.7B | Qwen3-1.7B | 75.03% | Final Turn 75.83%，Overall 下降 |
-| SIP-Novelty-Prune | 1.7B | Qwen3-1.7B | 75.02% | pruning 删除过多上下文，下降 |
-| Honest Ensemble | 1.7B×2 | Baseline+BEP 等权 | 76.92% | clean test verified；超过论文 76.71 |
-| Honest Ensemble | 1.7B×2 | 0.3 Baseline + 0.7 BEP | 76.76% | validation 0.1 网格选权；clean test verified；超过论文 76.71 |
-| Honest Ensemble | 1.7B×3 | Baseline+SIP+BEP 等权 | 76.99% | 预注册等权；clean test verified；超过论文 76.71 |
-| 集成 (等权6模型) | 1.7B×6 | Qwen3-1.7B | 76.24% | SELFELICIT诚实集成 |
-| 探索性集成 | 1.7B×3 | Baseline+SIP+BEP | 76.99%* | *历史测试集事后探索；现已有 validation-selected / pre-registered 合规版本 |
-
-### 新增 Ensemble 方法 (2026-06-06)
-
-基于新训练的 loss 方法 checkpoint（rank_auc, mil_noisy_and），结合既有模型（baseline, BEP, SIP），通过 validation-selected grid search 或 pre-registered equal weight 构建：
-
-| 方法 | 组件 | 权重 | Test Overall AUC | 超论文 76.71? |
-|------|------|------|:---:|:--:|
-| M8: Base+Rank+BEP | baseline + rank_auc + BEP | 0.2+0.1+0.7 (val grid) | **76.77%** | ✅ |
-| M10: 4-Way Equal | baseline + rank_auc + mil_noisy_and + BEP | 各 0.25 (equal) | **76.76%** | ✅ |
-
-> 📁 **详细记录**: `results/honest_ensemble/`  
-> 📁 **评估脚本**: `scripts/honest_ensemble/evaluate_new_ensembles.py`  
-> 📁 **预测文件**: `results/honest_ensemble/val_qual/`, `results/honest_ensemble/test_qual/`
-
-### 单模型训练结论
-
-所有基于 Qwen3-1.7B 的单模型方法（包括 prompt 修改和 loss 修改）均无法超越 baseline 75.99% 或论文 76.71%：
-
-| 方法 | Overall AUC | vs Baseline | 类型 |
-|------|:---:|:---:|------|
-| baseline / prompt_labels | 75.99% | — | 基准 |
-| dac_mark | 75.87% | -0.12% | prompt (DAC) |
-| rank_auc_strong | 75.78% | -0.21% | loss (ranking w=0.3) |
-| margin_loss | 75.72% | -0.27% | loss (margin) |
-| mil_noisy_and | 75.68% | -0.31% | loss (MIL) |
-| evidence_r1 | 75.60% | -0.39% | prompt (Evidence-R1) |
-| rank_auc | 75.56% | -0.43% | loss (ranking w=0.1) |
-| support_token | 75.53% | -0.46% | prompt |
-| focal_loss | 75.13% | -0.86% | loss (focal) |
-| ib_turns | 74.94% | -1.05% | prompt (IBCircuit) |
-| hyper_validate | 74.38% | -1.61% | prompt (HypER) |
-
-**结论**: 共测试 11 个单模型方法，全部在 74.38-75.99% 范围。Qwen3-1.7B 在此任务上已达容量上限。超越论文 76.71% 需通过 validation-selected ensemble 方法。
-
-> **Expert Heads 诊断** (2026-06-07): verdict=FAIL，0 candidates。小模型注意力极均匀。
-> **组合方法** (state_table+rank_auc, solution_contrast+rank_auc): 因 routing bug 未完成训练，但基于单模型模式，预期仍在 75-76% 范围。
-
----
-
-## 五、文件组织规范
-
-完整目录结构、命名规范和新增论文方法的文件放置规则见 `.claude/STRUCTURE.md`。本文件只维护研究状态、方法结论和经验索引；详细实验记录放在 `results/<paper_name>/`。
-
----
-
-## 六、实践经验
-
-### 模型下载：ModelScope > hf-mirror
-```python
-from modelscope import snapshot_download
-snapshot_download('qwen/Qwen3-1.7B', cache_dir='/home/user4/.cache/huggingface/hub/')
+h_r = w_r ⊙ H
+h_n = w_n ⊙ H
+h_nb = B(h_n)
+h_m = h_r + β · h_nb
 ```
 
-### `--quantize` 参数陷阱
-`bool_type(x) = x != "0"`：`--quantize 0` → False ✅；`--quantize False` → True ❌
+互补权重只作用于可选证据的 context token；其他有效 prompt token 在 `h_r/h_m` 中保持原始 `H`，在 `h_n` 中为零。
 
-### 训练规律
-1. **1.7B 是最佳性价比**: AUC 76% 接近论文 8B 的 76.7%，速度快 3.5 倍
-2. **Epoch 1 即最佳**: 之后快速过拟合，考虑降低 lr 或增大 dropout
-3. **debug 模式 1 epoch 足够判断方向**
-4. 所有方法使用 AdamW, wd=1e-2, lr=2e-4, r=16, lora_alpha=16
+共享后续网络分别计算：
 
-### 集成与验证集选择经验
-1. 不能在测试集上事后选择 ensemble 组合或权重；这会数据泄露
-2. baseline、SIP-Novelty、BEP-Adaptive-Labels 预测互补：合规结果见 `results/honest_ensemble/`
-3. 已完成 validation-selected / pre-registered honest ensemble：
-   - Baseline+BEP 等权：Test Overall AUC 76.92
-   - 0.3 Baseline + 0.7 BEP：Test Overall AUC 76.76（validation 0.1 网格选权）
-   - Baseline+SIP+BEP 等权：Test Overall AUC 76.99
-4. 后续 ensemble 必须继续遵守：先固定 validation 选择规则或预注册规则，再一次性 test
+```text
+p_r = P(h_r)
+p_m = P(h_m)
+```
 
-### SELFELICIT 实验教训
-1. 真实注意力需要 `attn_implementation="eager"`，sdpa不输出attention
-2. 集成时不能在测试集上调权重（数据泄露），等权平均为诚实数字
-3. 小模型注意力分数极均匀(0.002-0.008)，启发式有时比注意力更有效
+核心训练目标：
+
+```text
+L_r = BCE(p_r, y)
+L_m = BCE(p_m, y)
+L_cons = JS([p_r, 1-p_r], [p_m, 1-p_m])
+
+L_total = λ_r L_r
+        + λ_m L_m
+        + λ_cons L_cons
+```
+
+目标解释：证据表征应足以预测；变换后的非证据环境混入后仍应正确预测；两条预测应保持一致。
+
+当前不加入证据预算或 B 输出尺度正则。先记录 `a`/证据权重分布、`h_nb` 的输出尺度和 `βh_nb` 的实际贡献，再根据正式训练是否出现对应退化决定。
+
+`P(h_n)` 的 reversal performance 是必需诊断。
+
+## 5. Stage 2 首轮历史结果
+
+| 历史方向 | Overall Acc/AUC | Final Acc/AUC | Overall AUC 相对 A 模块参考 |
+|---|---:|---:|---:|
+| Shuffle | `68.72 / 74.14` | `62.52 / 72.79` | `-1.24` |
+| Token-wise MLP | `68.46 / 75.47` | `63.88 / 76.29` | `+0.09` |
+| Small Transformer | `68.06 / 75.25` | `67.18 / 74.73` | `-0.13` |
+
+解释边界：
+
+- 三个 candidate 都通过来源与参数审计。
+- 它们没有构造互补的 `h_r/h_n`。
+- 它们没有分别计算 `p_r/p_m`。
+- 它们没有使用预测一致性损失。
+- 结果只作为历史 pilot 和工程诊断，不能验证当前目标方法。
+
+## 6. 当前执行状态
+
+1. Round 1 已完成并通过 validation audit。Mixed/Evidence/Reversal 的 Overall Acc/AUC 分别为 `66.78 / 72.51`、`66.84 / 72.52`、`52.71 / 46.94`；相应 Final Acc/AUC 为 `61.20 / 73.46`、`61.45 / 73.51`、`25.78 / 40.80`。
+2. Round 2 已完成并通过 validation audit。Mixed/Evidence/Reversal 的 Overall Acc/AUC 分别为 `65.93 / 72.59`、`66.10 / 72.53`、`52.65 / 47.40`；相应 Final Acc/AUC 为 `64.82 / 73.01`、`64.58 / 72.89`、`25.54 / 41.18`。
+3. Round 1 -> 2 的 validation-only 调整为 `beta 0.10 -> 0.15`、B output ratio `1.00 -> 1.25`、`lambda_cons 0.10 -> 0.15`，并因 A 饱和降低 bootstrap/selector 学习率。Round 2 -> 3 调整为 `beta 0.15 -> 0.20`、B output ratio `1.25 -> 1.50`、`lambda_cons 0.15 -> 0.18`。没有使用 test、control 或额外 seed 作决策。
+4. Round 3 的 `a_bootstrap`、`calibrator_warmup`、`a_joint` 已完成；A 精确继承 `7/7` tensors，calibrator 继承已验证。`b_warmup` 训练已完成，快照时正在阶段内 validation。
+5. 唯一 supervisor 为 `scripts/cel_stage2_environment/run_dual_path_three_round_chain.sh`。剩余自动链：Round 3 最终 `joint`、validation/audit、三轮 final test/final audit、tensor-contract closeout、`STAGE2_DUAL_PATH_REPORT.md`。活跃时不得启动第二个 supervisor 或 candidate launcher。
+6. 不额外运行其他 seed；不运行第五点 control/ablation；历史单路径 pilot、preflight checkpoint 和未完成链不计入正式结果；三轮闭环前不启动 Stage 3。
+7. `2026-08-16` 已按完整训练集的 `rows * sequence_length^2` 几何找到最坏 batch：4 rows、2009 tokens、attention risk `16144324`。自适应 joint 预检峰值 `11975.2 MiB`，B-only 峰值 `10729.2 MiB`；两者均通过，且 joint 的 A/B 梯度非零、B-only 的 A 梯度为零。
+8. 高风险 joint batch 使用串行 evidence/mixed 执行和精确梯度拆分，低风险 batch 使用展开执行；自动 tensor contract 在 CPU/CUDA 上的最大梯度差分别为 `2.98e-08` 和 `1.19e-07`。
+9. 当前 Goal 应保持 `active`，不是 `blocked`。新对话先读取交接文件并重新只读检查 SSH；不要依赖旧 PID/百分比，也不要在未确认原链退出前执行恢复或重启。
+
+## 7. 方法设计原则
+
+方法设计应首先服从研究假设和目标因果机制，而不应以“最小改动、最少参数或单次训练成本最低”作为正式方案的首要目标。对于每一个阶段，应从目标机制反向设计完整且功能闭合的模块，明确其输入输出表征、模块之间的信息流、下游使用方式、训练目标、优化日程以及可验证的诊断指标。模块容量应与所要建模的变换复杂度相匹配，不能用过小或过于简化的模块替代核心方法，再据此判断研究方向是否有效。轻量模块可以用于接口检查、sanity check 或消融实验，但不应作为核心方法的主要证据。不应通过削弱核心模块的表达能力来节省正式训练。参数效率应在机制得到充分验证之后再进行优化。
+
+默认训练规范补充：训练前固定 `max_epochs`、validation 指标、`patience`、`min_delta`；每个 epoch 统一 train/validation，保存最佳 checkpoint，按 patience 早停并恢复最佳 checkpoint。新增模块默认直接加入整体 forward、完整损失和 optimizer，只有明确声明的模块特有机制才可冻结、交替或 warmup，并须记录动机、范围和审计判据。
+
+实现状态：训练 CLI 现已提供 `--max_epochs`、`--patience` 和 `--min_delta`，并按 validation loss 保存最佳 checkpoint、支持 patience 早停；`--epochs` 仅为兼容别名。现有历史阶段链和运行记录不应被解释为已满足新的统一协议。
+
+## 8. 环境与约束
+
+- 本地根目录：`/home/luo/work/dialogue-kt_migration_20260806`。
+- 本地测试环境：`/home/luo/miniconda3/envs/diagkt`。
+- 本地 GPU：NVIDIA GeForce RTX 4050 Laptop GPU 6GB。
+- 正式训练环境：SSH alias `3090`，远端 `/home/user4/dialogue-kt`，双 RTX 3090。
+- 本地 `saved_models/` 没有正式 checkpoint。
+- 最近记录的 Stage 1 权威远端刷新时间：`2026-08-12 23:17:24`。
+- 工作树原有大量用户修改与删除，不得 reset 或清理。
+
+## 9. 新对话读取顺序
+
+1. `.claude/STAGE2_HANDOFF.md`
+2. `.claude/CLAUDE.md`
+3. `.claude/MEMORY.md`
+4. `results/method_design/CEL_Modular_Flow.md`
+5. `results/method_design/CEL_Stage1_A_Module_Implementation.md`
+6. `results/method_design/CEL_Stage2_Environment_Generator_Implementation.md`
+7. `results/cel_stage2_environment/SUMMARY.md`
+
+## 10. 关键文件
+
+- 当前方法定义：`results/method_design/CEL_Modular_Flow.md`
+- A 模块实现：`results/method_design/CEL_Stage1_A_Module_Implementation.md`
+- B 模块目标实现：`results/method_design/CEL_Stage2_Environment_Generator_Implementation.md`
+- Stage 2 中文流程：`results/method_design/CEL_Stage2_实施流程与思路.md`
+- 整体说明：`results/cel_stage1_last_layer/CEL_三阶段整体方法说明.md`
+- Stage 2 交接：`.claude/STAGE2_HANDOFF.md`
+- 历史结果：`results/cel_stage2_environment/`

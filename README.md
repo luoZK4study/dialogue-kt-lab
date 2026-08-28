@@ -1,4 +1,57 @@
 # Dialogue Knowledge Tracing
+
+## Current Workspace Status
+
+This repository is a research workspace derived from the upstream Dialogue-KT
+codebase. The active scope is narrower than the upstream README below:
+
+- task: MathDial ATC dialogue knowledge tracing with `True` / `False` token
+  probabilities;
+- model: Qwen3-1.7B with LoRA;
+- methods in scope: the recertified LLMKT baseline and CEL A/B;
+- certified baseline: `lmkt_qwen3_1.7b_recert_20260620`, Overall Acc/AUC
+  `69.22 / 74.95`;
+- audited A-module reference: Overall Acc/AUC `70.03 / 75.38` and Final
+  Acc/AUC `66.80 / 77.26`;
+- the historical A-module checkpoint name is
+  `cel_task_conditioned_lastlayer_v26_selftrained_biaswarmup_joint_tinylr_qwen3_1.7b`;
+  this identifier is retained for provenance only, while method prose calls it
+  the A module;
+- paper reference target: Overall AUC `76.71`, which has not yet been reached;
+- Stage 2 first-round Shuffle, token-wise MLP, and small Transformer candidates
+  completed training and audit, but used a legacy single-path environment
+  residual flow. They are historical pilots and do not validate the current
+  target method; no Stage 2 winner is declared.
+- the current target constructs `h_r = ((a + 1) / 2) ⊙ H`,
+  `h_n = ((1 - a) / 2) ⊙ H`, `h_nb = B(h_n)`, and
+  `h_m = h_r + β · h_nb`, then compares evidence-only and mixed predictions
+  through the same downstream Qwen network;
+- the dual-path forward, three-term supervised/consistency objective, tensor
+  contracts, and capacity-adequate B module are implemented;
+- the default protocol is unified end-to-end training: all enabled modules
+  (including an optional calibrator) share one optimizer and objective from
+  epoch 1, with fixed max epochs, validation-based best-checkpoint selection,
+  patience, and min_delta early stopping; staged warmups are historical or
+  explicitly declared exceptions;
+- the training CLI exposes `--max_epochs`, `--patience`, and `--min_delta`;
+  `--epochs` remains a compatibility alias, and historical runs are not
+  retroactively claimed to have used the new early-stopping protocol;
+- Round 1 of the three-round configuration study is running from raw Qwen
+  with `model/data seed=1221`; no extra seed is being run and Stage 3 is not
+  started.
+
+The current authoritative Stage 1 result was successfully refreshed from the
+training server on `2026-08-12 23:17:24`. It contains metrics, per-turn
+predictions, KC outputs, and logs, but `saved_models/` contains no checkpoints.
+Use `/home/luo/miniconda3/envs/diagkt` for local source and smoke tests; formal
+checkpoint-based training and evaluation remain on the SSH server.
+
+For a new Stage 2 conversation, start with [.claude/STAGE2_HANDOFF.md](.claude/STAGE2_HANDOFF.md),
+[AGENTS.md](AGENTS.md), and [results/method_design/CEL_Stage2_实施流程与思路.md](results/method_design/CEL_Stage2_实施流程与思路.md).
+The original upstream project instructions continue below for reference.
+
+## Upstream Project README
+
 This is the official repo for the paper <a href="https://arxiv.org/abs/2409.16490">Exploring Knowledge Tracing in Tutor-Student Dialogues using LLMs</a>. The primary contributions here include 1) LLMKT and DKT-Sem, our language model-based KT models, 2) code to train and evaluate KT models, including the DKT family and BKT, on the dialogue knowledge tracing task, and 3) code to automatically annotate dialogues with knowledge component and correctness labels using the OpenAI API.
 
 If you use our code or find this work useful in your research then please cite us!

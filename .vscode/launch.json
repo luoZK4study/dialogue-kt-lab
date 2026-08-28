@@ -1,0 +1,66 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python Debugger: Debug Python File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "envFile": "${workspaceFolder}/.vscode/.env",
+            "python": "/home/lzk/miniconda3/envs/dialogue-kt/bin/python",
+            "args": [
+                "train",
+                "--dataset", "mathdial",
+                "--model_type", "lmkt",
+                "--debug",
+                "--quantize", "0",
+                "--base_model", "/home/lzk/.cache/modelscope/hub/Qwen/Qwen3-1.7B",
+                "--model_name", "debug_lmkt_qwen3_1.7b"
+            ],
+            "purpose": ["debug-in-terminal"]
+        },
+        {
+            "name": "Python Debugger: Debug using launch.json",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/dialogue_kt/main.py",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "envFile": "${workspaceFolder}/.vscode/.env",
+            "python": "/home/lzk/miniconda3/envs/dialogue-kt/bin/python",
+            "args": [
+                "train",
+                "--dataset", "mathdial",
+                "--model_type", "lmkt",
+                "--debug",
+                "--quantize", "0",
+                "--base_model", "/home/lzk/.cache/modelscope/hub/Qwen/Qwen3-1.7B",
+                "--model_name", "debug_lmkt_qwen3_1.7b"
+            ]
+        },
+        {
+            "name": "Debug main.py test",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/dialogue_kt/main.py",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "envFile": "${workspaceFolder}/.vscode/.env",
+            "python": "/home/lzk/miniconda3/envs/dialogue-kt/bin/python",
+            "args": [
+                "test",
+                "--dataset", "mathdial",
+                "--model_type", "lmkt",
+                "--debug",
+                "--quantize", "0",
+                "--base_model", "/home/lzk/.cache/modelscope/hub/Qwen/Qwen3-1.7B",
+                "--model_name", "debug_lmkt_qwen3_1.7b"
+            ]
+        }
+    ]
+}
